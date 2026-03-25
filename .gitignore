@@ -1,0 +1,8 @@
+# Carpeta de trabajo con IA (local only)
+IA/
+
+# Claude Code (puede contener tokens/API keys)
+.claude/
+
+# macOS
+.DS_Store
