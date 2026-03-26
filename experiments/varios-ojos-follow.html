@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mololo</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <script src="../js/eye-base.js"></script>
+  <script src="../js/tracker-eye.js"></script>
+  <script>
+    const EYE_GAP = 50;
+    const MAX_EYES = 5;
+    const activeEyes = [];
+    const fadingEyes = [];
+
+    function findPosition() {
+      const margin = 50;
+      const maxX = window.innerWidth - CELL_SIZE - margin;
+      const maxY = window.innerHeight - CELL_SIZE - margin;
+      const allEyes = [...activeEyes, ...fadingEyes];
+
+      if (allEyes.length === 0) {
+        return [margin + Math.random() * (maxX - margin),
+                margin + Math.random() * (maxY - margin)];
+      }
+
+      let bestX = margin, bestY = margin, bestDist = -1;
+      for (let i = 0; i < 150; i++) {
+        const x = margin + Math.random() * (maxX - margin);
+        const y = margin + Math.random() * (maxY - margin);
+        const minDist = Math.min(...allEyes.map(eye =>
+          Math.sqrt((x - eye.x) ** 2 + (y - eye.y) ** 2)
+        ));
+        if (minDist > bestDist) { bestDist = minDist; bestX = x; bestY = y; }
+      }
+      return [bestX, bestY];
+    }
+
+    function spawnEye() {
+      const [x, y] = findPosition();
+      const eye = new TrackerEye(x, y);
+      activeEyes.push(eye);
+
+      if (activeEyes.length > MAX_EYES) {
+        const oldest = activeEyes.shift();
+        fadingEyes.push(oldest);
+        oldest.destroy(() => {
+          const idx = fadingEyes.indexOf(oldest);
+          if (idx !== -1) fadingEyes.splice(idx, 1);
+        });
+      }
+    }
+
+    for (let i = 0; i < MAX_EYES; i++) {
+      setTimeout(() => spawnEye(), i * 300);
+    }
+
+    setInterval(spawnEye, 5000);
+
+    document.addEventListener('mousemove', (e) => {
+      lastMouseEvent = e;
+      activeEyes.forEach(eye => eye.updateFromCursor(e));
+    });
+  </script>
+</body>
+</html>

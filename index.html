@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mololo</title>
+  <title>Absent — test</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <script src="js/script.js"></script>
+  <script src="js/eye-base.js"></script>
+  <script src="js/tracker-eye.js"></script>
+  <script src="js/absent-eye.js"></script>
+  <script>
+    const cy = window.innerHeight / 2 - 100;
+    const cx = window.innerWidth / 2 - 100;
+
+    const tracker = new TrackerEye(cx - 200, cy);
+    const absent  = new AbsentEye(cx + 200, cy);
+
+    document.addEventListener('mousemove', (e) => {
+      lastMouseEvent = e;
+      tracker.updateFromCursor(e);
+    });
+  </script>
 </body>
 </html>
