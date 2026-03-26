@@ -2,8 +2,8 @@
 // Ojo que se mueve independientemente del cursor
 
 class AbsentEye extends Eye {
-  constructor(x, y) {
-    super(x, y);
+  constructor(x, y, parent = document.body) {
+    super(x, y, parent);
     this.wanderTarget = { col: 4, row: 4 };
     this.wanderTimeout = null;
     this.autoBlinkTimeout = null;

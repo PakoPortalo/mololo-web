@@ -12,13 +12,13 @@ const STRIP_Y = 4800;
 const STRIP_ANIM_COLS = [1, 2, 3];
 
 class Eye {
-  constructor(x, y) {
+  constructor(x, y, parent = document.body) {
     // DOM
     this.el = document.createElement('div');
     this.el.className = 'eye';
     this.el.style.left = `${x}px`;
     this.el.style.top = `${y}px`;
-    document.body.appendChild(this.el);
+    parent.appendChild(this.el);
 
     // Posición en pantalla
     this.x = x;

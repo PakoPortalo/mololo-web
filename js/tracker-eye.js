@@ -4,8 +4,8 @@
 let lastMouseEvent = null;
 
 class TrackerEye extends Eye {
-  constructor(x, y) {
-    super(x, y);
+  constructor(x, y, parent = document.body) {
+    super(x, y, parent);
     this.manualBlink = false;
     this.destroying = false;
     this.autoBlinkTimeout = null;

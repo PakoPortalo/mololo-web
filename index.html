@@ -3,24 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Absent — test</title>
+  <title>mololo</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+  <div id="main">
+    <div id="eyes-row"></div>
+    <div class="pc-text" id="pc-text" style="display:none">
+      <div><span class="pc-title">mololo</span></div>
+      <div class="pc-subtitle" id="version-text"></div>
+    </div>
+  </div>
+
   <script src="js/eye-base.js"></script>
   <script src="js/tracker-eye.js"></script>
   <script src="js/absent-eye.js"></script>
   <script>
-    const cy = window.innerHeight / 2 - 100;
-    const cx = window.innerWidth / 2 - 100;
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    const eyesRow = document.getElementById('eyes-row');
 
-    const tracker = new TrackerEye(cx - 200, cy);
-    const absent  = new AbsentEye(cx + 200, cy);
+    if (isMobile) {
+      eyesRow.style.width = '200px';
+      new AbsentEye(0, 0, eyesRow);
+      document.getElementById('version-text').textContent = 'estás en la versión móvil';
+      document.getElementById('pc-text').style.display = 'block';
+    } else {
+      const tracker = new TrackerEye(0, 0, eyesRow);
+      new AbsentEye(200, 0, eyesRow);
+      document.getElementById('version-text').textContent = 'estás en la versión pc';
+      document.getElementById('pc-text').style.display = 'block';
 
-    document.addEventListener('mousemove', (e) => {
-      lastMouseEvent = e;
-      tracker.updateFromCursor(e);
-    });
+      document.addEventListener('mousemove', (e) => {
+        lastMouseEvent = e;
+        tracker.updateFromCursor(e);
+      });
+    }
   </script>
 </body>
 </html>
