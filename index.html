@@ -223,10 +223,13 @@
 
     .hero-right {
       overflow: hidden;
+      position: relative;
     }
     .hero-right img {
-      width: 100%;
-      height: 100%;
+      position: absolute;
+      inset: -20px;
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
       object-fit: cover;
       display: block;
     }
@@ -620,6 +623,23 @@
       eyeL.updateFromCursor(e);
       eyeR.updateFromCursor(e);
     });
+
+    // Hero parallax
+    const heroImg = document.querySelector('.hero-right img');
+    const strength = 10;
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = ((e.clientX / window.innerWidth) - 0.5) * strength;
+      targetY = ((e.clientY / window.innerHeight) - 0.5) * strength;
+    });
+
+    (function parallaxLoop() {
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+      heroImg.style.transform = `translate(${currentX}px, ${currentY}px)`;
+      requestAnimationFrame(parallaxLoop);
+    })();
 
     // Btn tienda: alterna hover rosa / naranja
     const btnTienda = document.querySelector('.btn-tienda');
