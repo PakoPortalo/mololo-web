@@ -3,42 +3,650 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mololo</title>
+  <title>Mololo</title>
+  <link rel="icon" type="image/png" href="assets/images/Mololo_Logo_Bg.png?v=2">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/index.css">
+  <style>
+    /* ================================
+       OVERRIDE style.css para landing
+    ================================ */
+    body {
+      height: auto;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* ================================
+       VARIABLES
+    ================================ */
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --yellow: #FFCC00;
+      --green: #34C759;
+      --blue: #007AFF;
+      --red: #FF3B30;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Syne', sans-serif;
+    }
+
+    /* ================================
+       NAVBAR
+    ================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: var(--white);
+      z-index: 100;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-eye-wrapper {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .nav-eye-wrapper .eye {
+      transform: scale(0.25);
+      transform-origin: top left;
+    }
+
+    .nav-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      filter: invert(1);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .nav-links a:hover { opacity: 0.4; }
+
+    /* ================================
+       MAIN
+    ================================ */
+    main { padding-top: 60px; }
+
+    /* ================================
+       TICKER
+    ================================ */
+    .ticker {
+      border-top: 1.5px solid var(--black);
+      border-bottom: 1.5px solid var(--black);
+      background: var(--white);
+      overflow: hidden;
+      padding: 10px 0;
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker-scroll 18s linear infinite;
+    }
+
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    .ticker-item {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+      padding: 0 28px;
+      color: var(--black);
+    }
+
+    .tk-o { color: #ff8339; }
+    .tk-p { color: #ff83ff; }
+
+    .ticker-item { transition: color 0.2s; }
+    .ticker-item:nth-child(4n+1):hover,
+    .ticker-item:nth-child(4n+1):hover * { color: #ff83ff; }
+    .ticker-item:nth-child(4n+3):hover,
+    .ticker-item:nth-child(4n+3):hover * { color: #ff8339; }
+
+    .ticker-sep {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: rgba(0,0,0,0.25);
+      padding: 0 4px;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ================================
+       HERO
+    ================================ */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 60px);
+    }
+
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex: 1;
+    }
+
+    .hero-left {
+      position: relative;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 64px;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.15;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.3 0.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    .logo-sprite {
+      width: 500px;
+      height: 143px; /* 500 * 400/1400 */
+      max-width: 100%;
+      transition: transform 0.4s ease;
+    }
+    .logo-sprite:hover { transform: scale(1.04); }
+    .logo-sprite img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    .btn-tienda {
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.14em;
+      color: var(--black);
+      background: var(--white);
+      padding: 13px 36px;
+      text-decoration: none;
+      align-self: center;
+      margin-top: 14px;
+      transition: background 0.2s;
+    }
+    .btn-tienda { transition: background 0.2s; }
+    .btn-tienda.hover-alt:hover { background: #ff8339; color: var(--white); }
+    .btn-tienda:not(.hover-alt):hover  { background: #ff83ff; }
+
+    .hero-right {
+      overflow: hidden;
+    }
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ================================
+       PRODUCTOS
+    ================================ */
+    .productos {
+      padding: 96px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 52px;
+    }
+
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      width: 100%;
+      max-width: 1080px;
+    }
+
+    .producto-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .producto-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .producto-card:hover img { opacity: 0.8; }
+
+    .producto-nombre {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+    }
+
+    .producto-info {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.4);
+      text-decoration: none;
+    }
+    .producto-info:hover { color: var(--black); }
+
+    .btn-ver-mas {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      color: var(--black);
+      text-decoration: none;
+      border: 1px solid var(--black);
+      padding: 11px 32px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-ver-mas:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* ================================
+       CARRUSEL
+    ================================ */
+    .carrusel {
+      padding: 0 0 80px;
+      overflow: hidden;
+    }
+
+    .carrusel-viewport {
+      position: relative;
+      width: 72%;
+      margin: 0 auto;
+    }
+
+    .carrusel-main-img {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.25s;
+    }
+    .carrusel-main-img.fade { opacity: 0; }
+
+    .carrusel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      padding: 16px 20px;
+      color: var(--black);
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .carrusel-btn:hover { opacity: 0.35; }
+    .carrusel-btn.prev { left: -64px; }
+    .carrusel-btn.next { right: -64px; }
+
+    .carrusel-info {
+      text-align: center;
+      padding: 40px 32px 0;
+    }
+
+    .carrusel-titulo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.14em;
+    }
+
+    .carrusel-texto {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: rgba(0,0,0,0.45);
+      margin-top: 10px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+
+    /* ================================
+       DETALLE
+    ================================ */
+    .detalle img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ================================
+       NEWSLETTER
+    ================================ */
+    .newsletter {
+      padding: 96px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+    }
+
+    /* Escala el ojo de 200px a 120px */
+    .newsletter-eye-wrapper {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .newsletter-eye-wrapper .eye {
+      transform: scale(0.6);
+      transform-origin: top left;
+    }
+
+    .newsletter-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .newsletter-titulo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      font-weight: 400;
+    }
+
+    .newsletter-form {
+      display: flex;
+    }
+
+    .newsletter-input {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 12px 20px;
+      border: 1px solid var(--black);
+      border-right: none;
+      outline: none;
+      width: 220px;
+      background: var(--white);
+    }
+
+    .newsletter-submit {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 12px 24px;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .newsletter-submit:hover { background: #333; }
+
+    /* ================================
+       FOOTER
+    ================================ */
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 20px;
+      align-items: center;
+    }
+
+    .footer-legal span,
+    .footer-legal a {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: rgba(0,0,0,0.4);
+      text-decoration: none;
+    }
+    .footer-legal a:hover { color: var(--black); }
+
+    .footer-social {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-social a {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: rgba(0,0,0,0.4);
+      text-decoration: none;
+    }
+    .footer-social a:hover { color: var(--black); }
+  </style>
 </head>
 <body>
-  <div id="main">
-    <div id="eyes-row"></div>
-    <div class="pc-text" id="pc-text" style="display:none">
-      <div><span class="pc-title">mololo</span></div>
-      <div class="pc-subtitle" id="version-text"></div>
-    </div>
-  </div>
 
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-left">
+      <div class="nav-eye-wrapper" id="nav-eye"></div>
+      <a href="/"><img class="nav-logo" src="assets/images/hero/mololo-logo-hero.png" alt="MOLOLO"></a>
+    </div>
+    <div class="nav-links">
+      <a href="#">TIENDA</a>
+      <a href="/obra">OBRA</a>
+      <a href="/contacto">CONTACTO</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- MÓDULO 1: HERO -->
+    <section class="hero">
+      <div class="hero-split">
+        <div class="hero-left">
+          <div class="logo-sprite">
+            <img src="assets/images/hero/mololo-logo-hero.png" alt="MOLOLO">
+          </div>
+          <p class="hero-sub">Arte original y ediciones limitadas.</p>
+          <a class="btn-tienda" href="#">TIENDA</a>
+        </div>
+        <div class="hero-right">
+          <img src="assets/images/hero/hero.jpeg" alt="Obra de Mololo by Pako Portalo">
+        </div>
+      </div>
+
+      <!-- TICKER al fondo del hero -->
+      <div class="ticker">
+        <div class="ticker-track">
+          <span class="ticker-item">CUADROS</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">SERI<span class="tk-p">G</span><span class="tk-o">R</span>AFÍA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">CER<span class="tk-p">Á</span>MICA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">CAMISETA<span class="tk-o">S</span></span><span class="ticker-sep">·</span>
+          <span class="ticker-item">OB<span class="tk-p">R</span>A PLÁSTICA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">EDICION<span class="tk-o">E</span>S LIMITADAS</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">TÉCNIC<span class="tk-o">A</span> MIXT<span class="tk-p">A</span></span><span class="ticker-sep">·</span>
+          <span class="ticker-item">CUADROS</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">SERI<span class="tk-p">G</span><span class="tk-o">R</span>AFÍA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">CER<span class="tk-p">Á</span>MICA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">CAMISETA<span class="tk-o">S</span></span><span class="ticker-sep">·</span>
+          <span class="ticker-item">OB<span class="tk-p">R</span>A PLÁSTICA</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">EDICION<span class="tk-o">E</span>S LIMITADAS</span><span class="ticker-sep">·</span>
+          <span class="ticker-item">TÉCNIC<span class="tk-o">A</span> MIXT<span class="tk-p">A</span></span><span class="ticker-sep">·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULO 2: PRODUCTOS -->
+    <section class="productos">
+      <div class="productos-grid">
+        <div class="producto-card">
+          <img src="assets/images/productos/lamina.jpeg" alt="Lámina de serigrafía">
+          <span class="producto-nombre">LÁMINA</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
+        <div class="producto-card">
+          <img src="assets/images/productos/camiseta.png" alt="Camiseta Mololo">
+          <span class="producto-nombre">CAMISETA</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
+        <div class="producto-card">
+          <img src="assets/images/productos/ceramica.jpeg" alt="Cerámica Mololo">
+          <span class="producto-nombre">CERÁMICA</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
+      </div>
+      <a class="btn-ver-mas" href="#">VER MÁS</a>
+    </section>
+
+    <!-- MÓDULO 3: CARRUSEL -->
+    <section class="carrusel">
+      <div class="carrusel-viewport">
+        <img class="carrusel-main-img" id="carrusel-img"
+             src="assets/images/carrusel/cuadro-01.jpg" alt="Cuadro de Mololo">
+        <button class="carrusel-btn prev" id="carrusel-prev">←</button>
+        <button class="carrusel-btn next" id="carrusel-next">→</button>
+      </div>
+      <div class="carrusel-info">
+        <h2 class="carrusel-titulo">OBRA</h2>
+        <p class="carrusel-texto">Cuadros de gran formato. Horror vacui, calaveras, doodle.<br>Cada pieza es única.</p>
+      </div>
+    </section>
+
+    <!-- MÓDULO 4: DETALLE -->
+    <section class="detalle">
+      <img src="assets/images/detalle/detalle.jpg" alt="Detalle de obra">
+    </section>
+
+    <!-- MÓDULO 5: NEWSLETTER -->
+    <section class="newsletter">
+      <div class="newsletter-eye-wrapper" id="nl-eye-left"></div>
+      <div class="newsletter-content">
+        <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
+        <form class="newsletter-form" onsubmit="return false">
+          <input class="newsletter-input" type="email" placeholder="email">
+          <button class="newsletter-submit" type="submit">SUBMIT</button>
+        </form>
+      </div>
+      <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-legal">
+      <span>© 2026 Mololo</span>
+      <a href="#">Aviso legal</a>
+      <a href="#">Política de privacidad</a>
+      <a href="#">Política de cookies</a>
+      <a href="#">Política de devoluciones</a>
+      <a href="#">Términos y condiciones</a>
+      <a href="#">Contacto</a>
+    </div>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
   <script src="js/eye-base.js"></script>
   <script src="js/tracker-eye.js"></script>
   <script src="js/absent-eye.js"></script>
   <script>
-    const isMobile = window.matchMedia('(pointer: coarse)').matches;
-    const eyesRow = document.getElementById('eyes-row');
+    // Navbar: AbsentEye
+    new AbsentEye(0, 0, document.getElementById('nav-eye'));
 
-    if (isMobile) {
-      eyesRow.style.width = '200px';
-      new AbsentEye(0, 0, eyesRow);
-      document.getElementById('version-text').textContent = 'estás en la versión móvil';
-      document.getElementById('pc-text').style.display = 'block';
-    } else {
-      const tracker = new TrackerEye(0, 0, eyesRow);
-      new AbsentEye(200, 0, eyesRow);
-      document.getElementById('version-text').textContent = 'estás en la versión pc';
-      document.getElementById('pc-text').style.display = 'block';
+    // Newsletter: dos TrackerEyes
+    const eyeL = new TrackerEye(0, 0, document.getElementById('nl-eye-left'));
+    const eyeR = new TrackerEye(0, 0, document.getElementById('nl-eye-right'));
 
-      document.addEventListener('mousemove', (e) => {
-        lastMouseEvent = e;
-        tracker.updateFromCursor(e);
-      });
+    document.addEventListener('mousemove', (e) => {
+      lastMouseEvent = e;
+      eyeL.updateFromCursor(e);
+      eyeR.updateFromCursor(e);
+    });
+
+    // Btn tienda: alterna hover rosa / naranja
+    const btnTienda = document.querySelector('.btn-tienda');
+    btnTienda.addEventListener('mouseenter', () => {
+      btnTienda.classList.toggle('hover-alt');
+    });
+
+    // Carrusel
+    const slides = [
+      'assets/images/carrusel/cuadro-01.jpg',
+      'assets/images/carrusel/cuadro-02.jpg',
+      'assets/images/carrusel/cuadro-03.jpg'
+    ];
+    let idx = 0;
+    const img = document.getElementById('carrusel-img');
+
+    function goTo(newIdx) {
+      img.classList.add('fade');
+      setTimeout(() => {
+        idx = (newIdx + slides.length) % slides.length;
+        img.src = slides[idx];
+        img.classList.remove('fade');
+      }, 250);
     }
+
+    document.getElementById('carrusel-prev').addEventListener('click', () => goTo(idx - 1));
+    document.getElementById('carrusel-next').addEventListener('click', () => goTo(idx + 1));
   </script>
 </body>
 </html>
