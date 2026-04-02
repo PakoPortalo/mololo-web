@@ -339,40 +339,43 @@
     ================================ */
     .carrusel {
       padding: 0 0 80px;
+    }
+
+    .carrusel-outer {
+      position: relative;
       overflow: hidden;
     }
 
-    .carrusel-viewport {
-      position: relative;
-      width: 72%;
-      margin: 0 auto;
+    .carrusel-track {
+      display: flex;
+      transform: translateX(10%);
+      transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .carrusel-main-img {
-      width: 100%;
+    .carrusel-track img {
+      width: 80%;
+      flex-shrink: 0;
       aspect-ratio: 2 / 1;
       object-fit: cover;
       display: block;
-      transition: opacity 0.25s;
     }
-    .carrusel-main-img.fade { opacity: 0; }
 
     .carrusel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: none;
+      background: rgba(0,0,0,0.3);
       border: none;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       cursor: pointer;
-      padding: 16px 20px;
-      color: var(--black);
-      transition: opacity 0.15s;
+      padding: 14px 22px;
+      color: rgba(255,255,255,0.9);
+      transition: background 0.2s;
       z-index: 10;
     }
-    .carrusel-btn:hover { opacity: 0.35; }
-    .carrusel-btn.prev { left: -64px; }
-    .carrusel-btn.next { right: -64px; }
+    .carrusel-btn:hover { background: rgba(0,0,0,0.55); }
+    .carrusel-btn.prev { left: 11%; }
+    .carrusel-btn.next { right: 11%; }
 
     .carrusel-info {
       text-align: center;
@@ -592,9 +595,18 @@
 
     <!-- MÓDULO 3: CARRUSEL -->
     <section class="carrusel">
-      <div class="carrusel-viewport">
-        <img class="carrusel-main-img" id="carrusel-img"
-             src="assets/images/carrusel/cuadro-01.jpg" alt="Cuadro de Mololo">
+      <div class="carrusel-outer">
+        <div class="carrusel-track" id="carrusel-track">
+          <!-- clon final al principio para el loop hacia atrás -->
+          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+          <img src="assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
+          <img src="assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
+          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+          <!-- clones al final para el loop hacia adelante -->
+          <img src="assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
+          <img src="assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
+          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+        </div>
         <button class="carrusel-btn prev" id="carrusel-prev">←</button>
         <button class="carrusel-btn next" id="carrusel-next">→</button>
       </div>
@@ -704,25 +716,43 @@
     });
 
     // Carrusel
-    const slides = [
-      'assets/images/carrusel/cuadro-01.jpg',
-      'assets/images/carrusel/cuadro-02.jpg',
-      'assets/images/carrusel/cuadro-03.jpg'
-    ];
-    let idx = 0;
-    const img = document.getElementById('carrusel-img');
+    const track = document.getElementById('carrusel-track');
+    const total = 3;
+    // idx=1 es la primera imagen real (idx=0 es el clon del final)
+    let carruselIdx = 1;
+    let sliding = false;
 
-    function goTo(newIdx) {
-      img.classList.add('fade');
-      setTimeout(() => {
-        idx = (newIdx + slides.length) % slides.length;
-        img.src = slides[idx];
-        img.classList.remove('fade');
-      }, 250);
+    function setPos(idx, animated) {
+      if (!animated) track.style.transition = 'none';
+      track.style.transform = `translateX(${10 - idx * 80}%)`;
+      if (!animated) requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = ''; }));
     }
 
-    document.getElementById('carrusel-prev').addEventListener('click', () => goTo(idx - 1));
-    document.getElementById('carrusel-next').addEventListener('click', () => goTo(idx + 1));
+    // posición inicial sin animación
+    setPos(carruselIdx, false);
+
+    function slideTo(newIdx) {
+      if (sliding) return;
+      sliding = true;
+      carruselIdx = newIdx;
+      setPos(carruselIdx, true);
+      setTimeout(() => {
+        // llegamos al clon del final → teleport al real
+        if (carruselIdx >= total + 1) {
+          carruselIdx = 1;
+          setPos(carruselIdx, false);
+        }
+        // llegamos al clon del principio → teleport al real
+        if (carruselIdx <= 0) {
+          carruselIdx = total;
+          setPos(carruselIdx, false);
+        }
+        sliding = false;
+      }, 1120);
+    }
+
+    document.getElementById('carrusel-prev').addEventListener('click', () => slideTo(carruselIdx - 1));
+    document.getElementById('carrusel-next').addEventListener('click', () => slideTo(carruselIdx + 1));
   </script>
 </body>
 </html>
