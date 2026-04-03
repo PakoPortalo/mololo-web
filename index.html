@@ -402,16 +402,65 @@
     /* ================================
        DETALLE
     ================================ */
+    .detalle {
+      position: relative;
+      overflow: hidden;
+      /* Height fija para que el parallax tenga sentido visual */
+      height: 70vh;
+    }
+
     .detalle img {
+      position: absolute;
+      left: 0;
       width: 100%;
+      /* 140% de alto da 40% de margen para el parallax sin dejar huecos */
+      height: 140%;
+      object-fit: cover;
       display: block;
+      will-change: transform;
+    }
+
+    /* Sombra proyectada desde el módulo 3 (carrusel) sobre la imagen */
+    .detalle::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.15) 55%,
+        transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Sombra proyectada desde el módulo 5 (newsletter) sobre la imagen */
+    .detalle::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top,
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.15) 55%,
+        transparent 100%);
+      z-index: 1;
+      pointer-events: none;
     }
 
     /* ================================
        NEWSLETTER
     ================================ */
     .newsletter {
-      padding: 96px 64px;
+      padding: 96px 64px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+      background: var(--white);
+    }
+
+    .newsletter-top {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -444,6 +493,7 @@
       font-size: 1.5rem;
       letter-spacing: 0.04em;
       font-weight: 400;
+      color: var(--black);
     }
 
     .newsletter-form {
@@ -459,7 +509,9 @@
       outline: none;
       width: 220px;
       background: var(--white);
+      color: var(--black);
     }
+    .newsletter-input::placeholder { color: rgba(0,0,0,0.35); }
 
     .newsletter-submit {
       font-family: var(--font-display);
@@ -470,9 +522,15 @@
       color: var(--white);
       border: 1px solid var(--black);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
-    .newsletter-submit:hover { background: #333; }
+    .newsletter-submit.hover-alt:hover { background: #ff8339; color: var(--white); border-color: #ff8339; }
+    .newsletter-submit:not(.hover-alt):hover { background: #ff83ff; color: var(--black); border-color: #ff83ff; }
+
+    /* Calavera holográfica: sombra para que parezca que flota sobre el fondo blanco */
+    #holo-card {
+      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.18)) drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+    }
 
     /* ================================
        FOOTER
@@ -621,17 +679,20 @@
       <img src="assets/images/detalle/detalle.jpg" alt="Detalle de obra">
     </section>
 
-    <!-- MÓDULO 5: NEWSLETTER -->
+    <!-- MÓDULO 5: NEWSLETTER + HOLO CARD -->
     <section class="newsletter">
-      <div class="newsletter-eye-wrapper" id="nl-eye-left"></div>
-      <div class="newsletter-content">
-        <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
-        <form class="newsletter-form" onsubmit="return false">
-          <input class="newsletter-input" type="email" placeholder="email">
-          <button class="newsletter-submit" type="submit">SUBMIT</button>
-        </form>
+      <div class="newsletter-top">
+        <div class="newsletter-eye-wrapper" id="nl-eye-left"></div>
+        <div class="newsletter-content">
+          <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
+          <form class="newsletter-form" onsubmit="return false">
+            <input class="newsletter-input" type="email" placeholder="email">
+            <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
+          </form>
+        </div>
+        <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
       </div>
-      <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
+      <div id="holo-card"></div>
     </section>
 
   </main>
@@ -654,6 +715,7 @@
   </footer>
 
   <!-- SCRIPTS -->
+  <script src="js/holographic-card.js"></script>
   <script src="js/eye-base.js"></script>
   <script src="js/tracker-eye.js"></script>
   <script src="js/absent-eye.js"></script>
@@ -688,6 +750,26 @@
       requestAnimationFrame(parallaxLoop);
     })();
 
+    // Detalle parallax — la imagen se mueve al 30% de la velocidad de scroll
+    // creando la ilusión de que está en un plano más lejano
+    (function() {
+      const detalleImg = document.querySelector('.detalle img');
+      const detalleSection = document.querySelector('.detalle');
+
+      function updateDetalleParallax() {
+        const rect = detalleSection.getBoundingClientRect();
+        // Progreso de la sección en el viewport: 0 cuando entra por abajo, 1 cuando sale por arriba
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        // Rango de desplazamiento: la imagen mide 140%, así que hay 40% de margen → ±20% relativo
+        // Usamos ese margen para mover la imagen: translateY va de 0% a -20% según el scroll
+        const translateY = -progress * 20;
+        detalleImg.style.transform = `translateY(${translateY}%)`;
+      }
+
+      updateDetalleParallax();
+      window.addEventListener('scroll', updateDetalleParallax, { passive: true });
+    })();
+
     // Textura papel con canvas
     (function() {
       const size = 150;
@@ -709,10 +791,21 @@
     const btnVerMas = document.querySelector('.btn-ver-mas');
     btnVerMas.addEventListener('mouseenter', () => btnVerMas.classList.toggle('hover-alt'));
 
+    // Btn submit newsletter: alterna hover rosa / naranja
+    const btnSubmit = document.getElementById('nl-submit');
+    btnSubmit.addEventListener('mouseenter', () => btnSubmit.classList.toggle('hover-alt'));
+
     // Btn tienda: alterna hover rosa / naranja
     const btnTienda = document.querySelector('.btn-tienda');
     btnTienda.addEventListener('mouseenter', () => {
       btnTienda.classList.toggle('hover-alt');
+    });
+
+    // Holographic Card
+    new HolographicCard(document.getElementById('holo-card'), {
+      src: 'assets/images/skull.png',
+      width: 240,
+      height: 240,
     });
 
     // Carrusel
