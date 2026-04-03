@@ -452,19 +452,17 @@
        NEWSLETTER
     ================================ */
     .newsletter {
-      padding: 96px 64px 80px;
+      padding: 64px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 64px;
+      justify-content: center;
       background: var(--white);
     }
 
-    .newsletter-top {
+    .newsletter-inner {
+      width: 420px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 56px;
+      flex-direction: column;
+      gap: 24px;
     }
 
     /* Escala el ojo de 200px a 120px */
@@ -475,17 +473,15 @@
       overflow: hidden;
       flex-shrink: 0;
     }
+    .newsletter-eye-wrapper.eye-top-left {
+      align-self: flex-start;
+    }
+    .newsletter-eye-wrapper.eye-bottom-right {
+      align-self: flex-end;
+    }
     .newsletter-eye-wrapper .eye {
       transform: scale(0.6);
       transform-origin: top left;
-    }
-
-    .newsletter-content {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 28px;
     }
 
     .newsletter-titulo {
@@ -669,30 +665,31 @@
         <button class="carrusel-btn next" id="carrusel-next">→</button>
       </div>
       <div class="carrusel-info">
-        <h2 class="carrusel-titulo">OBRA</h2>
-        <p class="carrusel-texto">Cuadros de gran formato. Horror vacui, calaveras, doodle.<br>Cada pieza es única.</p>
+        <h2 class="carrusel-titulo">Gran formato</h2>
+        <p class="carrusel-texto">Serie <em>"Los diferentes colores de la muerte"</em>. Pinturas que exploran reflexiones sobre la vida y la muerte utilizando el horror vacui como lenguaje. Cada interrogación es una pregunta sobre lo que somos y sobre lo que dejamos. La muerte como punto de partida, el color no como esperanza, sino como urgencia — porque todo lo que importa de verdad promete intensidad.</p>
       </div>
     </section>
+
+    <!-- CALAVERA HOLOGRÁFICA -->
+    <div style="display:flex; justify-content:center; align-items:center; padding: 1px 0 50px; background: var(--white);">
+      <div id="holo-card"></div>
+    </div>
 
     <!-- MÓDULO 4: DETALLE -->
     <section class="detalle">
       <img src="assets/images/detalle/detalle.jpg" alt="Detalle de obra">
     </section>
 
-    <!-- MÓDULO 5: NEWSLETTER + HOLO CARD -->
+    <!-- MÓDULO 5: NEWSLETTER -->
     <section class="newsletter">
-      <div class="newsletter-top">
-        <div class="newsletter-eye-wrapper" id="nl-eye-left"></div>
-        <div class="newsletter-content">
-          <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
-          <form class="newsletter-form" onsubmit="return false">
-            <input class="newsletter-input" type="email" placeholder="email">
-            <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
-          </form>
-        </div>
-        <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
+      <div class="newsletter-inner">
+        <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
+        <form class="newsletter-form" onsubmit="return false">
+          <input class="newsletter-input" type="email" placeholder="email">
+          <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
+        </form>
+        <div class="newsletter-eye-wrapper eye-bottom-right" id="nl-eye-right"></div>
       </div>
-      <div id="holo-card"></div>
     </section>
 
   </main>
@@ -723,13 +720,11 @@
     // Navbar: AbsentEye
     new AbsentEye(0, 0, document.getElementById('nav-eye'));
 
-    // Newsletter: dos TrackerEyes
-    const eyeL = new TrackerEye(0, 0, document.getElementById('nl-eye-left'));
+    // Newsletter: TrackerEye
     const eyeR = new TrackerEye(0, 0, document.getElementById('nl-eye-right'));
 
     document.addEventListener('mousemove', (e) => {
       lastMouseEvent = e;
-      eyeL.updateFromCursor(e);
       eyeR.updateFromCursor(e);
     });
 
