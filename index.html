@@ -89,6 +89,62 @@
     .nav-links a:hover { opacity: 0.4; }
 
     /* ================================
+       HAMBURGER
+    ================================ */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      outline: none;
+    }
+    .nav-hamburger span {
+      display: block;
+      height: 1.5px;
+      background: var(--black);
+      transition: transform 0.25s, opacity 0.25s;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ================================
+       MOBILE NAV MENU
+    ================================ */
+    .nav-mobile-menu {
+      display: none;
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid #e8e8e8;
+      flex-direction: column;
+      z-index: 99;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+    }
+    .nav-mobile-menu.open {
+      max-height: 200px;
+    }
+    .nav-mobile-menu a {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      text-decoration: none;
+      padding: 18px 24px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .nav-mobile-menu a:last-child { border-bottom: none; }
+
+    /* ================================
        MAIN
     ================================ */
     main { padding-top: 60px; }
@@ -570,6 +626,63 @@
       text-decoration: none;
     }
     .footer-social a:hover { color: var(--black); }
+
+    /* ================================
+       RESPONSIVE — MÓVIL (≤768px)
+    ================================ */
+    @media (max-width: 768px) {
+
+      /* — Navbar — */
+      nav {
+        position: sticky;
+        top: 0;
+        padding: 0 20px;
+      }
+      main { padding-top: 0; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-mobile-menu { display: flex; }
+
+      /* — Hero — */
+      .hero { min-height: calc(100svh - 60px); }
+
+      .hero-split {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
+      .hero-right {
+        position: relative;
+        height: 56vw;
+        min-height: 220px;
+        overflow: hidden;
+        background: var(--black);
+      }
+      .hero-right img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .hero-left {
+        flex: 1;
+        padding: 48px 24px 52px;
+        gap: 12px;
+      }
+
+      .logo-sprite {
+        width: 80%;
+        height: auto;
+        aspect-ratio: 1400 / 400;
+      }
+
+      .btn-tienda {
+        margin-top: 8px;
+        padding: 14px 40px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -585,7 +698,17 @@
       <a href="/obra">OBRA</a>
       <a href="/contacto">CONTACTO</a>
     </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Menú móvil desplegable -->
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <a href="#">TIENDA</a>
+    <a href="/obra">OBRA</a>
+    <a href="/contacto">CONTACTO</a>
+  </div>
 
   <main>
 
@@ -801,6 +924,20 @@
       src: 'assets/images/skull.png',
       width: 240,
       height: 240,
+    });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
     });
 
     // Carrusel
