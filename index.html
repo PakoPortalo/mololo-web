@@ -45,7 +45,7 @@
       padding: 0 40px;
       background: var(--white);
       z-index: 100;
-      border-bottom: 1px solid #e8e8e8;
+      box-shadow: 0 1px 0 #e8e8e8;
     }
 
     .nav-left {
@@ -71,7 +71,10 @@
       width: auto;
       object-fit: contain;
       filter: invert(1);
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
+    .nav-logo.visible { opacity: 1; }
 
     .nav-links {
       display: flex;
@@ -123,7 +126,6 @@
       position: fixed;
       top: 60px; left: 0; right: 0;
       background: var(--white);
-      border-bottom: 1px solid #e8e8e8;
       flex-direction: column;
       z-index: 99;
       overflow: hidden;
@@ -132,6 +134,7 @@
     }
     .nav-mobile-menu.open {
       max-height: 200px;
+      box-shadow: 0 1px 0 #e8e8e8;
     }
     .nav-mobile-menu a {
       font-family: var(--font-body);
@@ -542,14 +545,25 @@
 
     .newsletter-titulo {
       font-family: var(--font-display);
-      font-size: 1.5rem;
+      font-size: 2rem;
       letter-spacing: 0.04em;
       font-weight: 400;
       color: var(--black);
+      text-align: center;
+    }
+
+    .newsletter-sub {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: rgba(0,0,0,0.45);
+      line-height: 1.5;
+      text-align: center;
+      margin-top: -14px;
     }
 
     .newsletter-form {
       display: flex;
+      justify-content: center;
     }
 
     .newsletter-input {
@@ -648,7 +662,7 @@
 
       .hero-split {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
       }
 
       .hero-right {
@@ -681,6 +695,22 @@
       .btn-tienda {
         margin-top: 8px;
         padding: 14px 40px;
+      }
+
+      /* — Productos — */
+      .productos {
+        padding: 60px 20px;
+        gap: 36px;
+      }
+
+      .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 100%;
+      }
+
+      .producto-card .marco {
+        border-width: 7px;
       }
     }
   </style>
@@ -766,6 +796,21 @@
           <span class="producto-nombre">CARAS ABSTRACT</span>
           <a class="producto-info" href="#">+ info</a>
         </div>
+        <div class="producto-card">
+          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
+          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
+        <div class="producto-card">
+          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
+          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
+        <div class="producto-card">
+          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
+          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <a class="producto-info" href="#">+ info</a>
+        </div>
       </div>
       <a class="btn-ver-mas" href="#">VER MÁS</a>
     </section>
@@ -806,7 +851,8 @@
     <!-- MÓDULO 5: NEWSLETTER -->
     <section class="newsletter">
       <div class="newsletter-inner">
-        <h3 class="newsletter-titulo">Sign up to our newsletter</h3>
+        <h3 class="newsletter-titulo">Suscríbete a nuestra newsletter</h3>
+        <p class="newsletter-sub">Consigue acceso a ofertas exclusivas y ediciones limitadas.</p>
         <form class="newsletter-form" onsubmit="return false">
           <input class="newsletter-input" type="email" placeholder="email">
           <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
@@ -925,6 +971,13 @@
       width: 240,
       height: 240,
     });
+
+    // Logo navbar: aparece al salir del hero
+    const navLogo = document.querySelector('.nav-logo');
+    const heroSection = document.querySelector('.hero');
+    new IntersectionObserver(([entry]) => {
+      navLogo.classList.toggle('visible', !entry.isIntersecting);
+    }, { threshold: 0 }).observe(heroSection);
 
     // Hamburger menu
     const hamburger = document.getElementById('nav-hamburger');
