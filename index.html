@@ -467,53 +467,96 @@
       line-height: 1.65;
     }
 
-    /* ================================
-       DETALLE
-    ================================ */
-    .detalle {
-      position: relative;
-      overflow: hidden;
-      /* Height fija para que el parallax tenga sentido visual */
-      height: 70vh;
-    }
 
-    .detalle img {
+    /* ================================
+       ARTISTA
+    ================================ */
+    .artista-header {
+      position: relative;
+      height: 70vh;
+      overflow: hidden;
+    }
+    .artista-header img {
       position: absolute;
       left: 0;
       width: 100%;
-      /* 140% de alto da 40% de margen para el parallax sin dejar huecos */
       height: 140%;
       object-fit: cover;
+      object-position: center;
       display: block;
       will-change: transform;
     }
-
-    /* Sombra proyectada desde el módulo 3 (carrusel) sobre la imagen */
-    .detalle::before {
-      content: '';
+    .artista-header-overlay {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 80px;
-      background: linear-gradient(to bottom,
-        rgba(0,0,0,0.45) 0%,
-        rgba(0,0,0,0.15) 55%,
-        transparent 100%);
-      z-index: 1;
-      pointer-events: none;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%),
+        linear-gradient(to top,    rgba(0,0,0,0.5) 0%, transparent 30%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .artista-header-titulo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .artista-header-titulo h2 {
+      font-family: var(--font-display);
+      font-size: 15rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      margin: 0;
+      line-height: 1;
+      filter: url(#obra-turbulence);
+      cursor: default;
+    }
+    .artista-by {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.65);
+      text-transform: uppercase;
     }
 
-    /* Sombra proyectada desde el módulo 5 (newsletter) sobre la imagen */
-    .detalle::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 80px;
-      background: linear-gradient(to top,
-        rgba(0,0,0,0.45) 0%,
-        rgba(0,0,0,0.15) 55%,
-        transparent 100%);
-      z-index: 1;
-      pointer-events: none;
+    .artista-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 80px 64px;
+      gap: 64px;
+      align-items: center;
+    }
+    .artista-foto img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(1);
+    }
+    .artista-texto p {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(0,0,0,0.7);
+      margin-bottom: 1.2em;
+    }
+    .artista-texto p:last-child { margin-bottom: 0; }
+
+    .artista-frase {
+      background: var(--black);
+      padding: 80px 64px;
+      text-align: center;
+    }
+    .artista-frase blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin: 0;
+      font-style: normal;
     }
 
     /* ================================
@@ -726,6 +769,30 @@
 </head>
 <body>
 
+  <!-- SVG filters -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <filter id="obra-turbulence" x="-50%" y="-50%" width="200%" height="200%">
+        <!-- Respiración idle -->
+        <feTurbulence type="turbulence" baseFrequency="0.012 0.008" numOctaves="3" seed="5" result="noise">
+          <animate attributeName="baseFrequency"
+            values="0.012 0.008; 0.014 0.010; 0.011 0.007; 0.013 0.009; 0.012 0.008"
+            dur="8s" repeatCount="indefinite" calcMode="linear"/>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="4"
+          xChannelSelector="R" yChannelSelector="G" result="breathed"/>
+        <!-- Cursor local -->
+        <feFlood flood-color="#808080" result="neutral"/>
+        <feImage id="obra-cursor-map" result="cursorGradient"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23ff8080'/%3E%3Cstop offset='100%25' stop-color='%23808080' stop-opacity='0'/%3E%3C/radialGradient%3E%3Crect width='300' height='300' fill='url(%23g)'/%3E%3C/svg%3E"
+          x="-9999" y="-9999" width="300" height="300"/>
+        <feComposite in="cursorGradient" in2="neutral" operator="over" result="cursorMap"/>
+        <feDisplacementMap id="obra-cursor-disp" in="breathed" in2="cursorMap"
+          scale="0" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <!-- NAVBAR -->
   <nav>
     <div class="nav-left">
@@ -806,18 +873,18 @@
           <a class="producto-info" href="#">+ info</a>
         </div>
         <div class="producto-card">
-          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
-          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <div class="marco"><img src="assets/images/productos/basquiat-style.jpg" alt="Basquiat Style" style="object-fit: contain; background: #000;"><div class="papel"></div></div>
+          <span class="producto-nombre">BASQUIAT STYLE</span>
           <a class="producto-info" href="#">+ info</a>
         </div>
         <div class="producto-card">
-          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
-          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <div class="marco"><img src="assets/images/productos/t-shirt-mololo.png" alt="T-Shirt Mololo"><div class="papel"></div></div>
+          <span class="producto-nombre">T-SHIRT MOLOLO</span>
           <a class="producto-info" href="#">+ info</a>
         </div>
         <div class="producto-card">
-          <div class="marco"><img src="assets/images/productos/caras-abstract.jpg" alt="Próximamente"><div class="papel"></div></div>
-          <span class="producto-nombre">PRÓXIMAMENTE</span>
+          <div class="marco"><img src="assets/images/productos/hoodie-mololo.png" alt="Hoodie Mololo"><div class="papel"></div></div>
+          <span class="producto-nombre">HOODIE MOLOLO</span>
           <a class="producto-info" href="#">+ info</a>
         </div>
       </div>
@@ -852,9 +919,36 @@
       <div id="holo-card"></div>
     </div>
 
-    <!-- MÓDULO 4: DETALLE -->
-    <section class="detalle">
-      <img src="assets/images/detalle/detalle.jpg" alt="Detalle de obra">
+    <!-- MÓDULO 4: EL ARTISTA -->
+    <section class="artista">
+
+      <!-- Header full-width con diablo.jpg -->
+      <div class="artista-header">
+        <img src="assets/images/obra/san raimundo pintura.jpg" alt="Pako Portalo pintando">
+        <div class="artista-header-overlay">
+          <div class="artista-header-titulo">
+            <h2>OBRA</h2>
+            <span class="artista-by">Mololo by Pako Portalo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuerpo: foto + texto -->
+      <div class="artista-body">
+        <div class="artista-foto">
+          <img src="assets/images/obra/san raimundo pintura.jpg" alt="Pako Portalo pintando">
+        </div>
+        <div class="artista-texto">
+          <p>Mololo nació de perder a alguien. En 2022 murió Andrés Cuesta, amigo y bajista de Papawanda, y empecé a pintar cuadros grandes llenos de calaveras, frases y color. No como homenaje. Como forma de procesar que la gente muere. Que yo moriría. Que todos lo haremos.</p>
+          <p>El nombre llegó después, en Kreuzberg. Me enamoré de las pegatinas pegadas sobre otras pegatinas — arte que muere para que nazca algo nuevo. Hice la primera: una calavera con "es mejor ser feliz que tener razón". La gente la quería. Así nació Mololo.</p>
+        </div>
+      </div>
+
+      <!-- Frase -->
+      <div class="artista-frase">
+        <blockquote>Es absurdo morirse de prisa.</blockquote>
+      </div>
+
     </section>
 
     <!-- MÓDULO 5: NEWSLETTER -->
@@ -923,25 +1017,6 @@
       requestAnimationFrame(parallaxLoop);
     })();
 
-    // Detalle parallax — la imagen se mueve al 30% de la velocidad de scroll
-    // creando la ilusión de que está en un plano más lejano
-    (function() {
-      const detalleImg = document.querySelector('.detalle img');
-      const detalleSection = document.querySelector('.detalle');
-
-      function updateDetalleParallax() {
-        const rect = detalleSection.getBoundingClientRect();
-        // Progreso de la sección en el viewport: 0 cuando entra por abajo, 1 cuando sale por arriba
-        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        // Rango de desplazamiento: la imagen mide 140%, así que hay 40% de margen → ±20% relativo
-        // Usamos ese margen para mover la imagen: translateY va de 0% a -20% según el scroll
-        const translateY = -progress * 20;
-        detalleImg.style.transform = `translateY(${translateY}%)`;
-      }
-
-      updateDetalleParallax();
-      window.addEventListener('scroll', updateDetalleParallax, { passive: true });
-    })();
 
     // Textura papel con canvas
     (function() {
@@ -1001,6 +1076,51 @@
         mobileMenu.classList.remove('open');
       });
     });
+
+    // OBRA cursor local distortion
+    (function() {
+      const obraH2 = document.querySelector('.artista-header-titulo h2');
+      const cursorMap = document.getElementById('obra-cursor-map');
+      const cursorDisp = document.getElementById('obra-cursor-disp');
+      const RADIUS = 150;
+      const INTENSITY = 40;
+      let currentScale = 0;
+      let targetScale = 0;
+
+      (function animate() {
+        currentScale += (targetScale - currentScale) * 0.08;
+        cursorDisp.setAttribute('scale', currentScale.toFixed(2));
+        requestAnimationFrame(animate);
+      })();
+
+      document.addEventListener('mousemove', (e) => {
+        const rect = obraH2.getBoundingClientRect();
+        cursorMap.setAttribute('x', e.clientX - rect.left - RADIUS);
+        cursorMap.setAttribute('y', e.clientY - rect.top - RADIUS);
+        cursorMap.setAttribute('width', RADIUS * 2);
+        cursorMap.setAttribute('height', RADIUS * 2);
+
+        const over = e.clientX >= rect.left && e.clientX <= rect.right &&
+                     e.clientY >= rect.top  && e.clientY <= rect.bottom;
+        targetScale = over ? INTENSITY : 0;
+      });
+    })();
+
+    // Artista header parallax
+    (function() {
+      const artistaImg = document.querySelector('.artista-header img');
+      const artistaSection = document.querySelector('.artista-header');
+
+      function updateArtistaParallax() {
+        const rect = artistaSection.getBoundingClientRect();
+        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+        const translateY = -progress * 20;
+        artistaImg.style.transform = `translateY(${translateY}%)`;
+      }
+
+      updateArtistaParallax();
+      window.addEventListener('scroll', updateArtistaParallax, { passive: true });
+    })();
 
     // Carrusel
     const track = document.getElementById('carrusel-track');
