@@ -703,7 +703,7 @@
       }
 
       .btn-tienda {
-        margin-top: 8px;
+        margin-top: 28px;
         padding: 14px 40px;
       }
 
@@ -744,9 +744,13 @@
   <!-- SVG filters -->
   <svg style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
-      <!-- Filtro solo wavy estático (mobile: sin animación para no bloquear scroll) -->
+      <!-- Filtro wavy animado sin cursor (mobile) -->
       <filter id="obra-turbulence-simple" x="-20%" y="-20%" width="140%" height="140%">
-        <feTurbulence type="turbulence" baseFrequency="0.013 0.009" numOctaves="3" seed="5"/>
+        <feTurbulence type="turbulence" baseFrequency="0.012 0.008" numOctaves="3" seed="5">
+          <animate attributeName="baseFrequency"
+            values="0.012 0.008; 0.014 0.010; 0.011 0.007; 0.013 0.009; 0.012 0.008"
+            dur="8s" repeatCount="indefinite" calcMode="linear"/>
+        </feTurbulence>
         <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
 
@@ -1120,20 +1124,31 @@
       });
     })();
 
-    // Artista header parallax (solo desktop)
-    if (!window.matchMedia('(max-width: 768px)').matches) {
+    // Artista header parallax
+    (function() {
       const artistaImg = document.querySelector('.artista-header img');
       const artistaSection = document.querySelector('.artista-header');
 
       function updateArtistaParallax() {
         const rect = artistaSection.getBoundingClientRect();
         const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        const translateY = -progress * 8;
+        const translateY = -progress * 18;
         artistaImg.style.transform = `translateY(${translateY}%)`;
       }
 
       updateArtistaParallax();
       window.addEventListener('scroll', updateArtistaParallax, { passive: true });
+    })();
+
+    // Pull quote: en móvil se activa por scroll (al pasar la mitad de pantalla), no por hover
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      const pullQuote = document.querySelector('.artista-pull-quote');
+      new IntersectionObserver(([entry], obs) => {
+        if (entry.isIntersecting) {
+          pullQuote.style.filter = 'grayscale(0) brightness(1)';
+          obs.unobserve(pullQuote);
+        }
+      }, { rootMargin: '0px 0px -50% 0px', threshold: 0 }).observe(pullQuote);
     }
 
   </script>
