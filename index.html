@@ -405,76 +405,27 @@
     /* ================================
        CARRUSEL
     ================================ */
-    .carrusel {
-      padding: 0 0 80px;
+    .diablo {
+      line-height: 0;
     }
-
-    .carrusel-outer {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .carrusel-track {
-      display: flex;
-      transform: translateX(10%);
-      transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .carrusel-track img {
-      width: 80%;
-      flex-shrink: 0;
-      aspect-ratio: 2 / 1;
-      object-fit: cover;
+    .diablo img {
+      width: 100%;
       display: block;
+      object-fit: cover;
     }
-
-    .carrusel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.3);
-      border: none;
-      font-size: 1.6rem;
-      cursor: pointer;
-      padding: 14px 22px;
-      color: rgba(255,255,255,0.9);
-      transition: background 0.2s;
-      z-index: 10;
-    }
-    .carrusel-btn:hover { background: rgba(0,0,0,0.55); }
-    .carrusel-btn.prev { left: 11%; }
-    .carrusel-btn.next { right: 11%; }
-
-    .carrusel-info {
-      text-align: center;
-      padding: 40px 32px 0;
-    }
-
-    .carrusel-titulo {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      letter-spacing: 0.14em;
-    }
-
-    .carrusel-texto {
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-      color: rgba(0,0,0,0.45);
-      margin-top: 10px;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.65;
-    }
-
 
     /* ================================
        ARTISTA
     ================================ */
+    .artista {
+      background: var(--black);
+    }
     .artista-header {
       position: relative;
-      height: 70vh;
-      overflow: hidden;
+      height: 90vh;
+      overflow: visible;
+      mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
     }
     .artista-header img {
       position: absolute;
@@ -490,8 +441,7 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%),
-        linear-gradient(to top,    rgba(0,0,0,0.5) 0%, transparent 30%);
+        linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 30%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -511,6 +461,8 @@
       line-height: 1;
       filter: url(#obra-turbulence);
       cursor: default;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .artista-by {
       font-family: var(--font-body);
@@ -521,42 +473,34 @@
     }
 
     .artista-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      max-width: 1080px;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 80px 64px;
-      gap: 64px;
-      align-items: center;
+      padding: 80px 40px 100px;
     }
-    .artista-foto img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-      filter: grayscale(1);
-    }
-    .artista-texto p {
+    .artista-body p {
       font-family: var(--font-body);
-      font-size: 0.95rem;
+      font-size: 1rem;
       line-height: 1.8;
-      color: rgba(0,0,0,0.7);
-      margin-bottom: 1.2em;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 1.8em;
     }
-    .artista-texto p:last-child { margin-bottom: 0; }
-
-    .artista-frase {
-      background: var(--black);
-      padding: 80px 64px;
-      text-align: center;
-    }
-    .artista-frase blockquote {
+    .artista-pull-quote {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      letter-spacing: 0.06em;
+      font-size: 3.2rem;
+      line-height: 1.05;
+      letter-spacing: 0.04em;
       color: var(--white);
-      margin: 0;
-      font-style: normal;
+      margin: 2.4em 0;
+      padding-left: 28px;
+      border-left: 2px solid rgba(255,255,255,0.3);
+    }
+    .artista-holo {
+      display: flex;
+      justify-content: center;
+      padding: 48px 0 0;
+    }
+    .artista-holo #artista-holo-card {
+      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.4)) drop-shadow(0 4px 10px rgba(0,0,0,0.2));
     }
 
     /* ================================
@@ -645,10 +589,6 @@
     .newsletter-submit.hover-alt:hover { background: #ff8339; color: var(--white); border-color: #ff8339; }
     .newsletter-submit:not(.hover-alt):hover { background: #ff83ff; color: var(--black); border-color: #ff83ff; }
 
-    /* Calavera holográfica: sombra para que parezca que flota sobre el fondo blanco */
-    #holo-card {
-      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.18)) drop-shadow(0 4px 10px rgba(0,0,0,0.12));
-    }
 
     /* ================================
        FOOTER
@@ -891,38 +831,9 @@
       <a class="btn-ver-mas" href="#">VER MÁS</a>
     </section>
 
-    <!-- MÓDULO 3: CARRUSEL -->
-    <section class="carrusel">
-      <div class="carrusel-outer">
-        <div class="carrusel-track" id="carrusel-track">
-          <!-- clon final al principio para el loop hacia atrás -->
-          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
-          <img src="assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
-          <img src="assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
-          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
-          <!-- clones al final para el loop hacia adelante -->
-          <img src="assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
-          <img src="assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
-          <img src="assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
-        </div>
-        <button class="carrusel-btn prev" id="carrusel-prev">←</button>
-        <button class="carrusel-btn next" id="carrusel-next">→</button>
-      </div>
-      <div class="carrusel-info">
-        <h2 class="carrusel-titulo">Gran formato</h2>
-        <p class="carrusel-texto">Serie <em>"Los diferentes colores de la muerte"</em>. Pinturas que exploran reflexiones sobre la vida y la muerte utilizando el horror vacui como lenguaje. Cada interrogación es una pregunta sobre lo que somos y sobre lo que dejamos. La muerte como punto de partida, el color no como esperanza, sino como urgencia — porque todo lo que importa de verdad promete intensidad.</p>
-      </div>
-    </section>
-
-    <!-- CALAVERA HOLOGRÁFICA -->
-    <div style="display:flex; justify-content:center; align-items:center; padding: 1px 0 50px; background: var(--white);">
-      <div id="holo-card"></div>
-    </div>
-
-    <!-- MÓDULO 4: EL ARTISTA -->
+    <!-- MÓDULO 3: EL ARTISTA -->
     <section class="artista">
 
-      <!-- Header full-width con diablo.jpg -->
       <div class="artista-header">
         <img src="assets/images/obra/san raimundo pintura.jpg" alt="Pako Portalo pintando">
         <div class="artista-header-overlay">
@@ -933,22 +844,27 @@
         </div>
       </div>
 
-      <!-- Cuerpo: foto + texto -->
       <div class="artista-body">
-        <div class="artista-foto">
-          <img src="assets/images/obra/san raimundo pintura.jpg" alt="Pako Portalo pintando">
-        </div>
-        <div class="artista-texto">
-          <p>Mololo nació de perder a alguien. En 2022 murió Andrés Cuesta, amigo y bajista de Papawanda, y empecé a pintar cuadros grandes llenos de calaveras, frases y color. No como homenaje. Como forma de procesar que la gente muere. Que yo moriría. Que todos lo haremos.</p>
-          <p>El nombre llegó después, en Kreuzberg. Me enamoré de las pegatinas pegadas sobre otras pegatinas — arte que muere para que nazca algo nuevo. Hice la primera: una calavera con "es mejor ser feliz que tener razón". La gente la quería. Así nació Mololo.</p>
+        <p>Mololo nace con la pérdida de un buen amigo. En 2022, Andrés Cuesta, fundador y bajista de Papawanda. En este momento, comienzo a pintar obras en acrílico grandes, 120x60cm, llenos de colores y motivos y símbolos relacionados con la muerte. Me di cuenta que esta era mi forma de vivir la pérdida de Andrés, enfrentarme al duelo y no olvidar su recuerdo.</p>
+
+        <p>Los cuadros están llenos de color porque para mí la muerte no es oscura, es intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones, el horror vacui, la incomprensión. Así, también, a medida que iba pintando, iban apareciendo nuevas frases vinculadas a todo el proceso de duelo, como por ejemplo "Hipervivencia", o "Flores vivas para honrar a los muertos".</p>
+
+        <div class="artista-pull-quote">¿De qué color es la muerte?</div>
+
+        <p>El proyecto continuó con los años hasta llegar a Berlín, en Kreuzberg, y viví su estética underground, los graffitis, los colores, los stickers. Me enamoré de lo efímero del arte, un barrio que se llena de pinturas que desaparecen con los años, y de la vinculación con la vida y la muerte, el ciclo que nunca para y no espera a nada ni nadie.</p>
+
+        <p>Comencé a expresarme con mis propios stickers, entré en el juego, y nació mololo, pero esta vez más amable, calaveras más redondas, más suaves, menos enfadadas con la pérdida, con el duelo. Dando pie a una nueva fase del proyecto, tratando de contar nuevas historias.</p>
+
+        <div class="artista-holo">
+          <div id="artista-holo-card"></div>
         </div>
       </div>
 
-      <!-- Frase -->
-      <div class="artista-frase">
-        <blockquote>Es absurdo morirse de prisa.</blockquote>
-      </div>
+    </section>
 
+    <!-- MÓDULO 4: IMAGEN DIABLO -->
+    <section class="diablo">
+      <img src="assets/images/carrusel/diablo.jpg" alt="Diablo — Mololo">
     </section>
 
     <!-- MÓDULO 5: NEWSLETTER -->
@@ -1050,7 +966,7 @@
     });
 
     // Holographic Card
-    new HolographicCard(document.getElementById('holo-card'), {
+    new HolographicCard(document.getElementById('artista-holo-card'), {
       src: 'assets/images/skull.png',
       width: 240,
       height: 240,
@@ -1122,44 +1038,6 @@
       window.addEventListener('scroll', updateArtistaParallax, { passive: true });
     })();
 
-    // Carrusel
-    const track = document.getElementById('carrusel-track');
-    const total = 3;
-    // idx=1 es la primera imagen real (idx=0 es el clon del final)
-    let carruselIdx = 1;
-    let sliding = false;
-
-    function setPos(idx, animated) {
-      if (!animated) track.style.transition = 'none';
-      track.style.transform = `translateX(${10 - idx * 80}%)`;
-      if (!animated) requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = ''; }));
-    }
-
-    // posición inicial sin animación
-    setPos(carruselIdx, false);
-
-    function slideTo(newIdx) {
-      if (sliding) return;
-      sliding = true;
-      carruselIdx = newIdx;
-      setPos(carruselIdx, true);
-      setTimeout(() => {
-        // llegamos al clon del final → teleport al real
-        if (carruselIdx >= total + 1) {
-          carruselIdx = 1;
-          setPos(carruselIdx, false);
-        }
-        // llegamos al clon del principio → teleport al real
-        if (carruselIdx <= 0) {
-          carruselIdx = total;
-          setPos(carruselIdx, false);
-        }
-        sliding = false;
-      }, 1120);
-    }
-
-    document.getElementById('carrusel-prev').addEventListener('click', () => slideTo(carruselIdx - 1));
-    document.getElementById('carrusel-next').addEventListener('click', () => slideTo(carruselIdx + 1));
   </script>
 </body>
 </html>

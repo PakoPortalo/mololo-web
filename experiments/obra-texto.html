@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBRA — opciones de texto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111; font-family: 'Syne', sans-serif; color: #f0ece4; }
+
+    .label {
+      color: rgba(255,255,255,0.35);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 60px 60px 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .label:first-child { border-top: none; }
+
+    /* ================================
+       OPCIÓN A — Columna editorial + pull quote
+    ================================ */
+    .opcion-a {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+    .opcion-a p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(240,236,228,0.75);
+      margin-bottom: 1.8em;
+    }
+    .pull-quote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.2rem;
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      color: #f0ece4;
+      margin: 2.4em 0;
+      padding-left: 28px;
+      border-left: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* ================================
+       OPCIÓN B — Dos columnas asimétricas (clave + texto)
+    ================================ */
+    .opcion-b {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+    .opcion-b-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .opcion-b-key {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.3);
+      padding-top: 4px;
+      text-align: right;
+    }
+    .opcion-b-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(240,236,228,0.75);
+    }
+
+    /* ================================
+       OPCIÓN C — Bloques separados con imágenes intercaladas
+    ================================ */
+    .opcion-c {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+    .opcion-c p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(240,236,228,0.75);
+      margin-bottom: 1.8em;
+    }
+    .opcion-c-img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      object-position: center;
+      margin: 48px 0;
+      display: block;
+    }
+    .opcion-c-img-placeholder {
+      width: 100%;
+      height: 420px;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 48px 0;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== OPCIÓN A ===================== -->
+  <p class="label">Opción A — Columna editorial + pull quote</p>
+  <div class="opcion-a">
+    <p>Mololo nace con la pérdida de un buen amigo. En 2022, Andrés Cuesta, fundador y bajista de Papawanda. En este momento, comienzo a pintar obras en acrílico grandes, 120x60cm, llenos de colores y motivos y símbolos relacionados con la muerte. Me di cuenta que esta era mi forma de vivir la pérdida de Andrés, enfrentarme al duelo y no olvidar su recuerdo.</p>
+
+    <p>Los cuadros están llenos de color porque para mí la muerte no es oscura, es intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones, el horror vacui, la incomprensión. Así, también, a medida que iba pintando, iban apareciendo nuevas frases vinculadas a todo el proceso de duelo, como por ejemplo "Hipervivencia", o "Flores vivas para honrar a los muertos".</p>
+
+    <div class="pull-quote">¿De qué color es la muerte?</div>
+
+    <p>El proyecto continuó con los años hasta llegar a Berlín, en Kreuzberg, y viví su estética underground, los graffitis, los colores, los stickers. Me enamoré de lo efímero del arte, un barrio que se llena de pinturas que desaparecen con los años, y de la vinculación con la vida y la muerte, el ciclo que nunca para y no espera a nada ni nadie.</p>
+
+    <p>Comencé a expresarme con mis propios stickers, entré en el juego, y nació mololo, pero esta vez más amable, calaveras más redondas, más suaves, menos enfadadas con la pérdida, con el duelo. Dando pie a una nueva fase del proyecto, tratando de contar nuevas historias.</p>
+
+    <div style="display:flex; justify-content:center; padding: 64px 0 0;">
+      <div id="holo-card" style="filter: drop-shadow(0 12px 32px rgba(0,0,0,0.4)) drop-shadow(0 4px 10px rgba(0,0,0,0.2));"></div>
+    </div>
+  </div>
+
+  <!-- ===================== OPCIÓN B ===================== -->
+  <p class="label">Opción B — Columna clave + texto</p>
+  <div class="opcion-b">
+    <div class="opcion-b-row">
+      <span class="opcion-b-key">2022</span>
+      <p class="opcion-b-text">Mololo nace con la pérdida de una persona muy especial. En 2022, fallece mi amigo Andrés Cuesta, violinista y bajista de la banda Papawanda. En este momento, sin ser consciente del por qué, comienzo a pintar obras en acrílico grandes, 120x60cm, llenos de colores y motivos y símbolos relacionados con la muerte.</p>
+    </div>
+    <div class="opcion-b-row">
+      <span class="opcion-b-key">Duelo</span>
+      <p class="opcion-b-text">Me di cuenta que esta era mi forma de vivir la pérdida de Andrés, enfrentarme al duelo y no olvidar su recuerdo. Los cuadros están llenos de color porque para mí la muerte no es oscura, es intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones. Así, también están llenos de frases que iban apareciendo mientras los pintaba, como por ejemplo "olvidar es más difícil que recordar", o "mis errores y yo somos la misma cosa".</p>
+    </div>
+    <div class="opcion-b-row">
+      <span class="opcion-b-key">Berlín</span>
+      <p class="opcion-b-text">El proyecto continuó hasta llegar a Berlín, en el barrio de Kreuzberg, me enamoré del barrio, completamente lleno de pegatinas. Me gustaba el concepto efímero de los graffitis y las pegatinas, unos encima de otros, obras de cientos de personas que mueren para que nazcan otras nuevas, que se peguen otras encima unas de otras.</p>
+    </div>
+    <div class="opcion-b-row">
+      <span class="opcion-b-key">Mololo</span>
+      <p class="opcion-b-text">Comencé a hacer mis propias pegatinas, y así nació Mololo, calaveras más amables, más cariñosas, menos enfadadas con la pérdida y el duelo, dando pie a una nueva fase del proyecto.</p>
+    </div>
+  </div>
+
+  <!-- ===================== OPCIÓN C ===================== -->
+  <p class="label">Opción C — Bloques con imágenes intercaladas</p>
+  <div class="opcion-c">
+    <p>Mololo nace con la pérdida de una persona muy especial. En 2022, fallece mi amigo Andrés Cuesta, violinista y bajista de la banda Papawanda. En este momento, sin ser consciente del por qué, comienzo a pintar obras en acrílico grandes, 120x60cm, llenos de colores y motivos y símbolos relacionados con la muerte.</p>
+
+    <p>Me di cuenta que esta era mi forma de vivir la pérdida de Andrés, enfrentarme al duelo y no olvidar su recuerdo. Los cuadros están llenos de color porque para mí la muerte no es oscura, es intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones.</p>
+
+    <img class="opcion-c-img" src="../assets/images/obra/san raimundo pintura.jpg" alt="Pako pintando">
+
+    <p>El proyecto continuó hasta llegar a Berlín, en el barrio de Kreuzberg, me enamoré del barrio, completamente lleno de pegatinas. Me gustaba el concepto efímero de los graffitis y las pegatinas, unos encima de otros, obras de cientos de personas que mueren para que nazcan otras nuevas, que se peguen otras encima unas de otras.</p>
+
+    <div class="opcion-c-img-placeholder">[ foto pegatinas Berlin ]</div>
+
+    <p>Comencé a hacer mis propias pegatinas, y así nació Mololo, calaveras más amables, más cariñosas, menos enfadadas con la pérdida y el duelo, dando pie a una nueva fase del proyecto.</p>
+  </div>
+
+  <script src="../js/holographic-card.js"></script>
+  <script>
+    new HolographicCard(document.getElementById('holo-card'), {
+      src: '../assets/images/skull.png',
+      width: 240,
+      height: 240,
+    });
+  </script>
+</body>
+</html>

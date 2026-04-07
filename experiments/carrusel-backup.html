@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrusel — backup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f5f0e8; font-family: 'Syne', sans-serif; }
+
+    .carrusel {
+      padding: 0 0 80px;
+    }
+
+    .carrusel-outer {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carrusel-track {
+      display: flex;
+      transform: translateX(10%);
+      transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .carrusel-track img {
+      width: 80%;
+      flex-shrink: 0;
+      aspect-ratio: 2 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carrusel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.3);
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      padding: 14px 22px;
+      color: rgba(255,255,255,0.9);
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .carrusel-btn:hover { background: rgba(0,0,0,0.55); }
+    .carrusel-btn.prev { left: 11%; }
+    .carrusel-btn.next { right: 11%; }
+
+    .carrusel-info {
+      text-align: center;
+      padding: 40px 32px 0;
+    }
+
+    .carrusel-titulo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.14em;
+    }
+
+    .carrusel-texto {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(0,0,0,0.45);
+      max-width: 560px;
+      margin: 12px auto 0;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="carrusel">
+    <div class="carrusel-outer">
+      <div class="carrusel-track" id="carrusel-track">
+        <!-- clon final al principio para el loop hacia atrás -->
+        <img src="../assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+        <img src="../assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
+        <img src="../assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
+        <img src="../assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+        <!-- clones al final para el loop hacia adelante -->
+        <img src="../assets/images/carrusel/cuadro-01-mockup.jpg" alt="Cuadro 1">
+        <img src="../assets/images/carrusel/cuadro-02-mockup.jpg" alt="Cuadro 2">
+        <img src="../assets/images/carrusel/cuadro-03-mockup.jpg" alt="Cuadro 3">
+      </div>
+      <button class="carrusel-btn prev" id="carrusel-prev">←</button>
+      <button class="carrusel-btn next" id="carrusel-next">→</button>
+    </div>
+    <div class="carrusel-info">
+      <h2 class="carrusel-titulo">Gran formato</h2>
+      <p class="carrusel-texto">Serie <em>"Los diferentes colores de la muerte"</em>. Pinturas que exploran reflexiones sobre la vida y la muerte utilizando el horror vacui como lenguaje. Cada interrogación es una pregunta sobre lo que somos y sobre lo que dejamos. La muerte como punto de partida, el color no como esperanza, sino como urgencia — porque todo lo que importa de verdad promete intensidad.</p>
+    </div>
+  </section>
+
+  <script>
+    const track = document.getElementById('carrusel-track');
+    const total = 3;
+    let carruselIdx = 1;
+    let sliding = false;
+
+    function setPos(idx, animated) {
+      if (!animated) track.style.transition = 'none';
+      track.style.transform = `translateX(${10 - idx * 80}%)`;
+      if (!animated) requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = ''; }));
+    }
+
+    setPos(carruselIdx, false);
+
+    function slideTo(newIdx) {
+      if (sliding) return;
+      sliding = true;
+      carruselIdx = newIdx;
+      setPos(carruselIdx, true);
+      setTimeout(() => {
+        if (carruselIdx >= total + 1) { carruselIdx = 1; setPos(carruselIdx, false); }
+        if (carruselIdx <= 0)         { carruselIdx = total; setPos(carruselIdx, false); }
+        sliding = false;
+      }, 1120);
+    }
+
+    document.getElementById('carrusel-prev').addEventListener('click', () => slideTo(carruselIdx - 1));
+    document.getElementById('carrusel-next').addEventListener('click', () => slideTo(carruselIdx + 1));
+  </script>
+</body>
+</html>
