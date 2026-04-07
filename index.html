@@ -22,7 +22,7 @@
     ================================ */
     body {
       height: auto;
-      min-height: 100vh;
+      min-height: 100svh;
       overflow-x: hidden;
       overflow-y: auto;
     }
@@ -218,7 +218,7 @@
     .hero {
       display: flex;
       flex-direction: column;
-      min-height: calc(100vh - 60px);
+      min-height: calc(100svh - 60px);
     }
 
     .hero-split {
@@ -422,10 +422,16 @@
     }
     .artista-header {
       position: relative;
-      height: 90vh;
-      overflow: visible;
-      mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+      height: 70svh;
+      overflow: hidden;
+    }
+    .artista-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, transparent 55%, var(--black) 100%);
+      pointer-events: none;
+      z-index: 2;
     }
     .artista-header img {
       position: absolute;
@@ -489,11 +495,23 @@
       font-size: 3.2rem;
       line-height: 1.05;
       letter-spacing: 0.04em;
-      color: var(--white);
       margin: 2.4em 0;
       padding-left: 28px;
       border-left: 2px solid rgba(255,255,255,0.3);
+      background: linear-gradient(
+        90deg,
+        #ff8339, #ff83ff, #ff8339
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: grayscale(1) brightness(2);
+      transition: filter 1.2s ease;
+      cursor: default;
     }
+    .artista-pull-quote:hover { filter: grayscale(0) brightness(1); }
+    .il-candidate { transition: color 5s ease-in-out; }
+
     .artista-holo {
       display: flex;
       justify-content: center;
@@ -650,7 +668,7 @@
       .nav-mobile-menu { display: flex; }
 
       /* — Hero — */
-      .hero { min-height: calc(100svh - 60px); }
+      .hero { min-height: 0; }
 
       .hero-split {
         display: flex;
@@ -673,7 +691,7 @@
       }
 
       .hero-left {
-        flex: 1;
+        flex: none;
         padding: 48px 24px 52px;
         gap: 12px;
       }
@@ -704,6 +722,20 @@
       .producto-card .marco {
         border-width: 7px;
       }
+
+      /* — Módulo OBRA — */
+      .artista-header { height: 300px; }
+      .artista-header-titulo h2 {
+        font-size: 44vw;
+        letter-spacing: 0.08em;
+        filter: url(#obra-turbulence-simple);
+      }
+      .artista-body {
+        padding: 48px 24px 64px;
+      }
+      .artista-pull-quote {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -712,6 +744,12 @@
   <!-- SVG filters -->
   <svg style="position:absolute;width:0;height:0;overflow:hidden">
     <defs>
+      <!-- Filtro solo wavy estático (mobile: sin animación para no bloquear scroll) -->
+      <filter id="obra-turbulence-simple" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="turbulence" baseFrequency="0.013 0.009" numOctaves="3" seed="5"/>
+        <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+
       <filter id="obra-turbulence" x="-50%" y="-50%" width="200%" height="200%">
         <!-- Respiración idle -->
         <feTurbulence type="turbulence" baseFrequency="0.012 0.008" numOctaves="3" seed="5" result="noise">
@@ -845,15 +883,15 @@
       </div>
 
       <div class="artista-body">
-        <p>Mololo nace con la pérdida de un buen amigo. En 2022, Andrés Cuesta, fundador y bajista de Papawanda. En este momento, comienzo a pintar obras en acrílico grandes, 120x60cm, llenos de colores y motivos y símbolos relacionados con la muerte. Me di cuenta que esta era mi forma de vivir la pérdida de Andrés, enfrentarme al duelo y no olvidar su recuerdo.</p>
+        <p><span class="il-candidate" data-zone="a">Mololo</span> nace con la pérdida de un buen amigo. En 2022, <span class="il-candidate" data-zone="a">Andrés Cuesta</span>, fundador y bajista de <span class="il-candidate" data-zone="a">Papawanda</span>. En este momento, <span class="il-candidate" data-zone="a">comienzo a pintar</span> obras grandes, 120x60cm en acrílico llenos de colores y motivos y símbolos relacionados con <span class="il-candidate" data-zone="a">la muerte</span>. Me di cuenta que esta era mi forma de <span class="il-candidate" data-zone="a">vivir la pérdida</span> de Andrés, enfrentarme al duelo y <span class="il-candidate" data-zone="a">no olvidar</span> su recuerdo.</p>
 
-        <p>Los cuadros están llenos de color porque para mí la muerte no es oscura, es intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones, el horror vacui, la incomprensión. Así, también, a medida que iba pintando, iban apareciendo nuevas frases vinculadas a todo el proceso de duelo, como por ejemplo "Hipervivencia", o "Flores vivas para honrar a los muertos".</p>
+        <p>Los cuadros están llenos de color porque para mí <span class="il-candidate" data-zone="a">la muerte no es oscura</span>, sino intensa, y no hay nada más intenso que todos los colores explotando en diferentes direcciones, el <span class="il-candidate" data-zone="a">horror vacui</span>, <span class="il-candidate" data-zone="a">la incomprensión</span>. Así, también, a medida que iba pintando, iban apareciendo nuevas frases <span class="il-candidate" data-zone="a">vinculadas al duelo</span>, como por ejemplo <span class="il-candidate" data-zone="a">"Hipervivencia"</span>, o <span class="il-candidate" data-zone="a">"Flores vivas para honrar a los muertos"</span>.</p>
 
         <div class="artista-pull-quote">¿De qué color es la muerte?</div>
 
-        <p>El proyecto continuó con los años hasta llegar a Berlín, en Kreuzberg, y viví su estética underground, los graffitis, los colores, los stickers. Me enamoré de lo efímero del arte, un barrio que se llena de pinturas que desaparecen con los años, y de la vinculación con la vida y la muerte, el ciclo que nunca para y no espera a nada ni nadie.</p>
+        <p>El proyecto continuó con los años hasta llegar a <span class="il-candidate" data-zone="b">Berlín, en Kreuzberg</span>, y viví la estética <span class="il-candidate" data-zone="b">underground</span>, los <span class="il-candidate" data-zone="b">graffitis</span>, los colores, los <span class="il-candidate" data-zone="b">stickers</span>. Me enamoré de <span class="il-candidate" data-zone="b">lo efímero</span> del arte, un barrio que se llena de pinturas que desaparecen con los años, y de <span class="il-candidate" data-zone="b">la vinculación</span> con <span class="il-candidate" data-zone="b">la vida</span> y <span class="il-candidate" data-zone="b">la muerte</span>, el ciclo que nunca para y no espera a nada ni nadie.</p>
 
-        <p>Comencé a expresarme con mis propios stickers, entré en el juego, y nació mololo, pero esta vez más amable, calaveras más redondas, más suaves, menos enfadadas con la pérdida, con el duelo. Dando pie a una nueva fase del proyecto, tratando de contar nuevas historias.</p>
+        <p>Comencé a expresarme con mis propios stickers, entré en el juego, y <span class="il-candidate" data-zone="b">nació mololo</span>, pero esta vez <span class="il-candidate" data-zone="b">más amable</span>, calaveras más redondas, <span class="il-candidate" data-zone="b">más suaves</span>, <span class="il-candidate" data-zone="b">menos enfadadas</span> con la pérdida, con el duelo. Dando pie a una <span class="il-candidate" data-zone="b">nueva fase</span> del proyecto, tratando de contar <span class="il-candidate" data-zone="b">nuevas historias</span>.</p>
 
         <div class="artista-holo">
           <div id="artista-holo-card"></div>
@@ -916,22 +954,24 @@
       eyeR.updateFromCursor(e);
     });
 
-    // Hero parallax
-    const heroImg = document.querySelector('.hero-right img');
-    const strength = 10;
-    let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+    // Hero parallax (solo desktop)
+    if (!window.matchMedia('(max-width: 768px)').matches) {
+      const heroImg = document.querySelector('.hero-right img');
+      const strength = 10;
+      let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-      targetX = ((e.clientX / window.innerWidth) - 0.5) * strength;
-      targetY = ((e.clientY / window.innerHeight) - 0.5) * strength;
-    });
+      document.addEventListener('mousemove', (e) => {
+        targetX = ((e.clientX / window.innerWidth) - 0.5) * strength;
+        targetY = ((e.clientY / window.innerHeight) - 0.5) * strength;
+      });
 
-    (function parallaxLoop() {
-      currentX += (targetX - currentX) * 0.06;
-      currentY += (targetY - currentY) * 0.06;
-      heroImg.style.transform = `translate(${currentX}px, ${currentY}px)`;
-      requestAnimationFrame(parallaxLoop);
-    })();
+      (function parallaxLoop() {
+        currentX += (targetX - currentX) * 0.06;
+        currentY += (targetY - currentY) * 0.06;
+        heroImg.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        requestAnimationFrame(parallaxLoop);
+      })();
+    }
 
 
     // Textura papel con canvas
@@ -972,6 +1012,63 @@
       height: 240,
     });
 
+    // Palabras iluminadas: la zona elige aleatoriamente qué palabra encender
+    (function() {
+      const N = '#ff8339', R = '#ff83ff';
+      const IL_SEQ   = [N,R,R,N,N,R,N,R,N,N,R,R,N,R,N,R,R,N,R,N,N,R,N,R,N,R,R];
+      const zoneIdx  = { a: 0, b: 0 };
+      const MAX_ZONE = 3;
+      const HOLD     = 4000;  // ms con el color en pico
+      const FADE     = 5000;  // ms de transición (coincide con CSS)
+
+      // Agrupa candidatos por zona
+      const zones = { a: [], b: [] };
+      document.querySelectorAll('.il-candidate').forEach(el => {
+        zones[el.dataset.zone].push(el);
+      });
+
+      function activeCount(zone) {
+        return zones[zone].filter(el => el.classList.contains('il-on')).length;
+      }
+
+      function lightNext(zone) {
+        if (activeCount(zone) >= MAX_ZONE) {
+          // Zona llena, reintenta en 800ms
+          setTimeout(() => lightNext(zone), 800);
+          return;
+        }
+        // Candidatos disponibles (no encendidos ahora)
+        const available = zones[zone].filter(el => !el.classList.contains('il-on'));
+        if (!available.length) return;
+
+        // Elige uno al azar
+        const el = available[Math.floor(Math.random() * available.length)];
+        const color = IL_SEQ[zoneIdx[zone] % IL_SEQ.length];
+        zoneIdx[zone]++;
+
+        el.classList.add('il-on');
+        el.style.color = color;
+
+        // Cuando apaga esta palabra, programa la siguiente con pausa aleatoria
+        setTimeout(() => {
+          el.classList.remove('il-on');
+          el.style.color = '';
+          const pausa = 3000 + Math.random() * 2000; // 3-5s entre palabras
+          setTimeout(() => lightNext(zone), pausa + FADE);
+        }, HOLD);
+
+        // Lanza otro slot independiente con retardo aleatorio (para tener hasta 3 activos)
+        const retardo = 3000 + Math.random() * 3000;
+        setTimeout(() => lightNext(zone), retardo);
+      }
+
+      // Arranca cada zona con un pequeño desfase
+      lightNext('a');
+      setTimeout(() => lightNext('a'), 2000);
+      setTimeout(() => lightNext('b'), 1000);
+      setTimeout(() => lightNext('b'), 3500);
+    })();
+
     // Logo navbar: aparece al salir del hero
     const navLogo = document.querySelector('.nav-logo');
     const heroSection = document.querySelector('.hero');
@@ -993,8 +1090,9 @@
       });
     });
 
-    // OBRA cursor local distortion
+    // OBRA cursor local distortion (solo desktop)
     (function() {
+      if (window.matchMedia('(max-width: 768px)').matches) return;
       const obraH2 = document.querySelector('.artista-header-titulo h2');
       const cursorMap = document.getElementById('obra-cursor-map');
       const cursorDisp = document.getElementById('obra-cursor-disp');
@@ -1022,21 +1120,21 @@
       });
     })();
 
-    // Artista header parallax
-    (function() {
+    // Artista header parallax (solo desktop)
+    if (!window.matchMedia('(max-width: 768px)').matches) {
       const artistaImg = document.querySelector('.artista-header img');
       const artistaSection = document.querySelector('.artista-header');
 
       function updateArtistaParallax() {
         const rect = artistaSection.getBoundingClientRect();
         const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        const translateY = -progress * 20;
+        const translateY = -progress * 8;
         artistaImg.style.transform = `translateY(${translateY}%)`;
       }
 
       updateArtistaParallax();
       window.addEventListener('scroll', updateArtistaParallax, { passive: true });
-    })();
+    }
 
   </script>
 </body>
