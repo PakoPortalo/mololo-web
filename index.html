@@ -133,7 +133,7 @@
           <a class="producto-info" href="#">+ info</a>
         </div>
         <div class="producto-card">
-          <div class="marco"><img src="assets/images/productos/basquiat-style.jpg" alt="Basquiat Style" style="object-fit: contain; background: #000;"><div class="papel"></div></div>
+          <div class="marco"><img src="assets/images/productos/basquiat-style.jpg" alt="Basquiat Style"><div class="papel"></div></div>
           <span class="producto-nombre">BASQUIAT STYLE</span>
           <a class="producto-info" href="#">+ info</a>
         </div>
@@ -182,21 +182,37 @@
 
     </section>
 
-    <!-- MÓDULO 4: IMAGEN DIABLO -->
-    <section class="diablo">
-      <img src="assets/images/carrusel/diablo.jpg" alt="Diablo — Mololo">
+    <!-- MÓDULO 4: CUADRO — Sapien sobre sapien -->
+    <section class="cuadro-lupa">
+      <canvas id="cuadro-lens-canvas"></canvas>
+      <div class="cuadro-lupa-inner">
+        <div class="cuadro-lupa-header">
+          <h2 class="cuadro-lupa-titulo">Sapien sobre sapien</h2>
+          <p class="cuadro-lupa-sub">acrílico sobre DM. 120 x 60cm</p>
+        </div>
+        <div class="cuadro-marco" id="cuadro-marco">
+          <img id="cuadro-img" src="assets/images/cuadro2.jpg" alt="Sapien sobre sapien — Mololo">
+        </div>
+        <div class="cuadro-lupa-footer">
+          MOLOLO — <span>2022</span>
+        </div>
+      </div>
     </section>
 
     <!-- MÓDULO 5: NEWSLETTER -->
     <section class="newsletter">
+      <div class="newsletter-wrapper">
+      <span class="newsletter-pretitulo">¿quieres saber más?</span>
       <div class="newsletter-inner">
+        <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
         <h3 class="newsletter-titulo">Suscríbete a nuestra newsletter</h3>
         <p class="newsletter-sub">Consigue acceso a ofertas exclusivas y ediciones limitadas.</p>
         <form class="newsletter-form" onsubmit="return false">
           <input class="newsletter-input" type="email" placeholder="email">
           <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
         </form>
-        <div class="newsletter-eye-wrapper eye-bottom-right" id="nl-eye-right"></div>
+        <img class="newsletter-calaveritas" src="assets/source/calaveritas.jpg" alt="Calaveritas — Mololo">
+      </div>
       </div>
     </section>
 

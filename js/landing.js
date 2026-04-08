@@ -19,7 +19,7 @@ document.addEventListener('mousemove', (e) => {
 // ================================
 if (!window.matchMedia('(max-width: 768px)').matches) {
   const heroImg = document.querySelector('.hero-right img');
-  const strength = 10;
+  const strength = 25;
   let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
   document.addEventListener('mousemove', (e) => {
@@ -211,14 +211,198 @@ mobileMenu.querySelectorAll('a').forEach(a => {
 
 
 // ================================
-// PULL QUOTE: en móvil se activa por scroll
+// PULL QUOTE: se activa por scroll en móvil y desktop
 // ================================
-if (window.matchMedia('(max-width: 768px)').matches) {
+(function() {
   const pullQuote = document.querySelector('.artista-pull-quote');
-  new IntersectionObserver(([entry], obs) => {
-    if (entry.isIntersecting) {
-      pullQuote.style.filter = 'grayscale(0) brightness(1)';
-      obs.unobserve(pullQuote);
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    // Mobile: activar una vez permanentemente
+    new IntersectionObserver(([entry], obs) => {
+      if (entry.isIntersecting) {
+        pullQuote.style.filter = 'grayscale(0) brightness(1)';
+        obs.unobserve(pullQuote);
+      }
+    }, { rootMargin: '0px 0px -50% 0px', threshold: 0 }).observe(pullQuote);
+  } else {
+    // Desktop: toggle al cruzar la mitad de pantalla
+    new IntersectionObserver(([entry]) => {
+      pullQuote.classList.toggle('scroll-active', entry.isIntersecting);
+    }, { rootMargin: '0px 0px -50% 0px', threshold: 0 }).observe(pullQuote);
+  }
+})();
+
+
+// ================================
+// MÓDULO 4: LUPA
+// ================================
+(function () {
+  const img    = document.getElementById('cuadro-img');
+  const canvas = document.getElementById('cuadro-lens-canvas');
+  const marco  = document.getElementById('cuadro-marco');
+  if (!img || !canvas || !marco) return;
+
+  const ctx = canvas.getContext('2d');
+
+  // Imagen sin filtros CSS para que el canvas siempre dibuje nítido
+  const lensImg = new Image();
+  lensImg.src = img.src;
+  const isMobile = window.matchMedia('(hover: none)').matches;
+
+  let cursor      = null;
+  let currentR    = 0;
+  let targetR     = 0;
+  let autoPhase   = 0;
+  let touchActive = false;
+  let rafId       = null;
+  let lastPt      = null;
+
+  const LENS_R  = 120;
+  const ZOOM    = 2;
+  const LERP_SP = 0.14;
+
+  let cssW = 0, cssH = 0;
+
+  function resizeLens() {
+    const dpr = window.devicePixelRatio || 1;
+    cssW = window.innerWidth;
+    cssH = window.innerHeight;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function drawLens(x, y, r) {
+    if (r < 1) return;
+
+    const imgRect = img.getBoundingClientRect();
+    const imgX = x - imgRect.left;
+    const imgY = y - imgRect.top;
+    const lensD  = r * 2;
+    const scaleX = img.naturalWidth  / imgRect.width;
+    const scaleY = img.naturalHeight / imgRect.height;
+    const srcW = (lensD / ZOOM) * scaleX;
+    const srcH = (lensD / ZOOM) * scaleY;
+    const srcX = Math.max(0, Math.min(imgX * scaleX - srcW / 2, img.naturalWidth  - srcW));
+    const srcY = Math.max(0, Math.min(imgY * scaleY - srcH / 2, img.naturalHeight - srcH));
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.drawImage(lensImg, srcX, srcY, srcW, srcH, x - r, y - r, lensD, lensD);
+
+    // Viñeta interior
+    const vig = ctx.createRadialGradient(x, y, r * 0.52, x, y, r);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(0,0,0,0.13)');
+    ctx.fillStyle = vig;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Destello
+    const glare = ctx.createRadialGradient(x - r * 0.28, y - r * 0.28, 0, x - r * 0.1, y - r * 0.1, r * 0.65);
+    glare.addColorStop(0, 'rgba(255,255,255,0.14)');
+    glare.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glare;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Sombra exterior
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r + 2, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,0,0,0.22)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+
+    // Aro dorado
+    ctx.save();
+    const rim = ctx.createLinearGradient(x - r, y - r, x + r, y + r);
+    rim.addColorStop(0.00, '#d4a843');
+    rim.addColorStop(0.30, '#ffe9a8');
+    rim.addColorStop(0.60, '#c89830');
+    rim.addColorStop(1.00, '#7a5510');
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.strokeStyle = rim;
+    ctx.lineWidth = 3.5;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function getAutoPoint() {
+    const imgRect = img.getBoundingClientRect();
+    const margin = LENS_R + 28;
+    const cx = imgRect.left + imgRect.width  / 2;
+    const cy = imgRect.top  + imgRect.height / 2;
+    const rx = imgRect.width  / 2 - margin;
+    const ry = imgRect.height / 2 - margin;
+    const corners = [
+      [cx,      cy - ry],
+      [cx + rx, cy],
+      [cx,      cy + ry],
+      [cx - rx, cy],
+    ];
+    const t   = (autoPhase % 1) * 4;
+    const seg = Math.floor(t) % 4;
+    const f   = t - Math.floor(t);
+    const fr  = corners[seg];
+    const to  = corners[(seg + 1) % 4];
+    return { x: fr[0] + (to[0] - fr[0]) * f, y: fr[1] + (to[1] - fr[1]) * f };
+  }
+
+  function frameLens() {
+    ctx.clearRect(0, 0, cssW, cssH);
+    let pt;
+    if (isMobile && !touchActive) {
+      autoPhase += 0.001;
+      pt = getAutoPoint();
+      targetR = LENS_R;
+    } else if (cursor) {
+      pt = cursor;
+      targetR = LENS_R;
+    } else {
+      targetR = 0;
+      pt = lastPt;
     }
-  }, { rootMargin: '0px 0px -50% 0px', threshold: 0 }).observe(pullQuote);
-}
+    if (pt) lastPt = pt;
+    currentR = lerp(currentR, targetR, LERP_SP);
+    if (pt && currentR > 1) drawLens(pt.x, pt.y, currentR);
+    rafId = requestAnimationFrame(frameLens);
+  }
+
+  marco.addEventListener('mousemove', e => { cursor = { x: e.clientX, y: e.clientY }; });
+  marco.addEventListener('mouseleave', () => { cursor = null; });
+  marco.addEventListener('touchstart', e => {
+    touchActive = true;
+    cursor = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: true });
+  marco.addEventListener('touchmove', e => {
+    e.preventDefault();
+    cursor = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: false });
+  marco.addEventListener('touchend', () => { touchActive = false; cursor = null; });
+
+  window.addEventListener('resize', resizeLens);
+
+  function initLens() {
+    resizeLens();
+    if (isMobile) targetR = LENS_R;
+    if (rafId) cancelAnimationFrame(rafId);
+    frameLens();
+  }
+
+  if (img.complete && img.naturalWidth) {
+    initLens();
+  } else {
+    img.addEventListener('load', initLens);
+  }
+})();
