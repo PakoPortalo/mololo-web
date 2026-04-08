@@ -637,7 +637,7 @@ main { padding-top: 60px; }
   width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .newsletter-pretitulo {
@@ -679,12 +679,13 @@ main { padding-top: 60px; }
   color: rgba(0,0,0,0.45);
   line-height: 1.5;
   text-align: center;
-  margin-top: -14px;
+  /* margin-top: -14px; */
 }
 
 .newsletter-form {
   display: flex;
   justify-content: center;
+  /* margin-top: 4px; */
 }
 
 .newsletter-input {
@@ -719,6 +720,7 @@ main { padding-top: 60px; }
   height: auto;
   display: block;
   align-self: center;
+  margin-top: 12px;
 }
 
 /* ================================
@@ -848,5 +850,26 @@ footer {
   }
   .artista-pull-quote {
     font-size: 2rem;
+  }
+
+  /* — Módulo cuadro (lupa) — */
+  .cuadro-marco {
+    border-width: 8px;
+  }
+
+  /* — Newsletter — */
+  .newsletter-eye-wrapper {
+    display: none;
+  }
+  .newsletter-pretitulo {
+    align-self: center;
+    margin-bottom: 8px;
+    font-size: 2.2rem;
+  }
+  .newsletter-titulo {
+    font-size: 2.8rem;
+  }
+  .newsletter-inner {
+    width: 100%;
   }
 }

@@ -73,9 +73,7 @@ const holoCard = new HolographicCard(document.getElementById('artista-holo-card'
   width: 240,
   height: 240,
 });
-if (window.matchMedia('(max-width: 768px)').matches) {
-  holoCard.startMobileAnimation();
-}
+
 
 
 // ================================
@@ -139,6 +137,19 @@ const heroSection = document.querySelector('.hero');
 new IntersectionObserver(([entry]) => {
   navLogo.classList.toggle('visible', !entry.isIntersecting);
 }, { threshold: 0 }).observe(heroSection);
+
+
+// ================================
+// OBRA: scroll suave desde navbar
+// ================================
+document.querySelectorAll('a[href="#artista"]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.getElementById('artista');
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
 
 
 // ================================
@@ -247,6 +258,7 @@ mobileMenu.querySelectorAll('a').forEach(a => {
   const lensImg = new Image();
   lensImg.src = img.src;
   const isMobile = window.matchMedia('(hover: none)').matches;
+  if (isMobile) return;
 
   let cursor      = null;
   let currentR    = 0;
