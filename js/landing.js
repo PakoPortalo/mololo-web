@@ -130,13 +130,51 @@ const holoCard = new HolographicCard(document.getElementById('artista-holo-card'
 
 
 // ================================
+// GREETING: frases en el navbar, solo en el hero (desktop)
+// ================================
+(function() {
+  const el = document.getElementById('nav-greeting');
+  if (!el || window.matchMedia('(max-width: 768px)').matches) return;
+
+  const phrases = ['¡Hola!', 'Hello!', '你好!', 'नमस्ते!', 'مرحبًا!', 'สวัสดี!'];
+  let idx = 0;
+  let inHero = true;
+  let t = null;
+
+  function showNext() {
+    if (!inHero) { el.classList.remove('visible'); return; }
+    el.textContent = phrases[idx];
+    el.classList.add('visible');
+    idx = (idx + 1) % phrases.length;
+    t = setTimeout(() => {
+      el.classList.remove('visible');
+      t = setTimeout(showNext, 900);
+    }, 2200);
+  }
+
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      inHero = true;
+      clearTimeout(t);
+      el.classList.remove('visible');
+      idx = 0;
+      t = setTimeout(showNext, 400);
+    } else {
+      inHero = false; // la frase actual termina y para
+    }
+  }, { threshold: 0 }).observe(document.querySelector('.ticker'));
+
+  showNext();
+})();
+
+
+// ================================
 // LOGO NAVBAR: aparece al salir del hero
 // ================================
 const navLogo = document.querySelector('.nav-logo');
-const heroSection = document.querySelector('.hero');
 new IntersectionObserver(([entry]) => {
   navLogo.classList.toggle('visible', !entry.isIntersecting);
-}, { threshold: 0 }).observe(heroSection);
+}, { threshold: 0 }).observe(document.querySelector('.ticker'));
 
 
 // ================================
