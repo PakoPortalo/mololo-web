@@ -31,6 +31,8 @@ class HolographicCard {
     this._isTimeoutFinished = false;
     this._enterTimeout = null;
     this._img          = null;
+    this._isMobileAuto = false;
+    this._autoPhase    = 0;
 
     this._build();
     this._loadImage();
@@ -90,6 +92,7 @@ class HolographicCard {
   }
 
   _attachEvents() {
+    if (this._isMobileAuto) return; // en modo auto, los eventos de mouse no interfieren
     const c = this._container;
     c.addEventListener('mouseenter', (e) => this._onMouseEnter(e));
     c.addEventListener('mousemove',  (e) => this._onMouseMove(e));
@@ -257,14 +260,48 @@ class HolographicCard {
     ctx.drawImage(this._offscreen, 0, 0);           // multiply clipped gradient onto skull
   }
 
+  startMobileAnimation() {
+    this._isMobileAuto = true;
+    this._isHovered    = true;
+  }
+
   _startIdleAnimation() {
     let tick = 0;
+    const SPEED = 0.0018; // ~21s por vuelta completa en rombo
     const loop = () => {
       // Lerp hoverProgress toward target every frame → smooth fade in/out
       const target = this._isHovered ? 1 : 0;
       this._hoverProgress += (target - this._hoverProgress) * 0.06;
 
-      if (!this._isHovered) {
+      if (this._isMobileAuto) {
+        this._isHovered = true; // forzado cada frame, ningún evento puede sobreescribirlo
+
+        // Rombo: loop continuo por las 4 esquinas (cuadrado girado 45°)
+        this._autoPhase = (this._autoPhase + SPEED) % 1;
+
+        const A = 0.5; // amplitud moderada
+        const corners = [
+          { x: 0.5,     y: 0.5 - A }, // arriba
+          { x: 0.5 + A, y: 0.5     }, // derecha
+          { x: 0.5,     y: 0.5 + A }, // abajo
+          { x: 0.5 - A, y: 0.5     }, // izquierda
+        ];
+        const seg  = this._autoPhase * 4;
+        const i    = Math.floor(seg) % 4;
+        const t = seg - Math.floor(seg);
+        const from = corners[i];
+        const to   = corners[(i + 1) % 4];
+        const nx   = from.x + (to.x - from.x) * t;
+        const ny   = from.y + (to.y - from.y) * t;
+        this._mousePos = { x: nx, y: ny };
+
+        // Tilt 3D: mapea posición normalizada a coordenadas absolutas del rect
+        const rect = this._getRect();
+        const fakeX = rect.left + rect.width  * nx;
+        const fakeY = rect.top  + rect.height * ny;
+        this._applyMatrix(this._getMatrix(fakeX, fakeY));
+
+      } else if (!this._isHovered) {
         tick += 0.003;
         this._mousePos = {
           x: (Math.sin(tick) + 1) / 2,

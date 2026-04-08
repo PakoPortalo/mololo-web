@@ -1010,11 +1010,14 @@
     });
 
     // Holographic Card
-    new HolographicCard(document.getElementById('artista-holo-card'), {
+    const holoCard = new HolographicCard(document.getElementById('artista-holo-card'), {
       src: 'assets/images/skull.png',
       width: 240,
       height: 240,
     });
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      holoCard.startMobileAnimation();
+    }
 
     // Palabras iluminadas: la zona elige aleatoriamente qué palabra encender
     (function() {
