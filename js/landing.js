@@ -60,8 +60,9 @@ if (!window.matchMedia('(max-width: 768px)').matches) {
 // BOTONES: alterna hover rosa / naranja
 // ================================
 ['.btn-ver-mas', '#nl-submit', '.btn-tienda'].forEach(selector => {
-  const el = document.querySelector(selector);
-  if (el) el.addEventListener('mouseenter', () => el.classList.toggle('hover-alt'));
+  document.querySelectorAll(selector).forEach(el => {
+    el.addEventListener('mouseenter', () => el.classList.toggle('hover-alt'));
+  });
 });
 
 
@@ -136,7 +137,7 @@ const holoCard = new HolographicCard(document.getElementById('artista-holo-card'
   const el = document.getElementById('nav-greeting');
   if (!el || window.matchMedia('(max-width: 768px)').matches) return;
 
-  const phrases = ['¡Hola!', 'Hello!', '你好!', 'नमस्ते!', 'مرحبًا!', 'สวัสดี!'];
+  const phrases = ['Hola!', 'Hello!', '你好!', 'नमस्ते!', 'مرحبًا!', 'สวัสดี!'];
   let idx = 0;
   let inHero = true;
   let t = null;
@@ -148,8 +149,8 @@ const holoCard = new HolographicCard(document.getElementById('artista-holo-card'
     idx = (idx + 1) % phrases.length;
     t = setTimeout(() => {
       el.classList.remove('visible');
-      t = setTimeout(showNext, 900);
-    }, 2200);
+      t = setTimeout(showNext, 1800);
+    }, 3500);
   }
 
   new IntersectionObserver(([entry]) => {
@@ -178,14 +179,17 @@ new IntersectionObserver(([entry]) => {
 
 
 // ================================
-// OBRA: scroll suave desde navbar
+// SCROLL SUAVE DESDE NAVBAR
 // ================================
-document.querySelectorAll('a[href="#artista"]').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const el = document.getElementById('artista');
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top, behavior: 'smooth' });
+['#artista', '#encargos'].forEach(selector => {
+  document.querySelectorAll(`a[href="${selector}"]`).forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(selector);
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   });
 });
 

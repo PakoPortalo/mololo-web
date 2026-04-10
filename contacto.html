@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto — Mololo by Pako Portalo</title>
+  <link rel="icon" type="image/png" href="assets/images/Mololo_Logo_Bg.png">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/landing.css">
+  <style>
+    .contacto {
+      padding: 32px 48px 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: var(--white);
+      height: calc(100svh - 136px);
+      margin-top: 60px;
+      overflow: hidden;
+    }
+
+    .contacto-wrapper {
+      width: 100%;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Calaveritas debajo del texto izquierdo */
+    .contacto-calaveritas {
+      width: 75%;
+      height: auto;
+      display: block;
+      margin-top: 0;
+    }
+
+    /* Dos columnas */
+    .contacto-body {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* — Columna izquierda — */
+    .contacto-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 8px;
+    }
+    .contacto-info .newsletter-pretitulo {
+      margin-bottom: 0;
+    }
+
+    .contacto-titulo {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .contacto-sub {
+      font-family: var(--font-body);
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      line-height: 1.75;
+      color: rgba(0,0,0,0.55);
+      max-width: 340px;
+    }
+
+    /* — Columna derecha: formulario — */
+    .contacto-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contacto-field-group {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid rgba(0,0,0,0.15);
+      padding: 18px 0 8px;
+      transition: border-color 0.2s;
+    }
+    .contacto-field-group:focus-within {
+      border-color: var(--black);
+    }
+
+    .contacto-label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      color: rgba(0,0,0,0.35);
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+    .contacto-field-group:focus-within .contacto-label {
+      color: var(--black);
+    }
+
+    .contacto-field {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--black);
+      width: 100%;
+      padding: 0;
+    }
+    .contacto-field::placeholder { color: transparent; }
+
+    textarea.contacto-field {
+      resize: none;
+      min-height: 80px;
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
+
+    /* Mensajes Formspree */
+    [data-fs-error] {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: #c0392b;
+      margin-top: 4px;
+      display: none;
+    }
+
+
+    .contacto-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .contacto-submit {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      letter-spacing: 0.14em;
+      padding: 13px 48px;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .contacto-submit.hover-alt:hover  { background: var(--orange); color: var(--white); border-color: var(--orange); }
+    .contacto-submit:not(.hover-alt):hover { background: var(--pink); color: var(--black); border-color: var(--pink); }
+    .contacto-submit:disabled { opacity: 0.45; cursor: default; }
+
+    [data-fs-success] {
+      font-family: var(--font-body) !important;
+      font-size: 1rem !important;
+      line-height: 1.75 !important;
+      color: #FF3A3B !important;
+      background: none !important;
+      border: none !important;
+      padding: 16px 0 8px !important;
+      display: none;
+    }
+
+    .contacto-gracias {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: rgba(0,0,0,0.38);
+      text-align: center;
+    }
+
+    /* — Responsive — */
+    @media (max-width: 768px) {
+      .contacto {
+        height: auto;
+        padding: 48px 24px 56px;
+        overflow: visible;
+      }
+      .contacto-calaveritas { width: 60%; }
+      .contacto-body {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .contacto-sub { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <span class="nav-greeting" id="nav-greeting"></span>
+    <div class="nav-left">
+      <div class="nav-eye-wrapper" id="nav-eye"></div>
+      <a href="index.html"><img class="nav-logo visible" src="assets/images/hero/mololo-logo-hero.png" alt="MOLOLO"></a>
+    </div>
+    <div class="nav-links">
+      <a href="https://shop.mololo.es">TIENDA</a>
+      <a href="index.html#artista">OBRA</a>
+      <a href="index.html#encargos">ENCARGOS</a>
+      <a href="contacto.html">CONTACTO</a>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <a href="https://shop.mololo.es">TIENDA</a>
+    <a href="index.html#artista">OBRA</a>
+    <a href="index.html#encargos">ENCARGOS</a>
+    <a href="contacto.html">CONTACTO</a>
+  </div>
+
+  <main>
+    <section class="contacto">
+      <div class="contacto-wrapper">
+
+        <!-- Dos columnas -->
+        <div class="contacto-body">
+
+          <!-- Izquierda: texto + calaveritas -->
+          <div class="contacto-info">
+            <span class="newsletter-pretitulo">¡Hola!</span>
+            <h1 class="contacto-titulo">¿Puedo ayudarte?</h1>
+            <p class="contacto-sub">Si tienes alguna duda, comentario o petición, no dudes en ponerte en contacto. Estaré encantado de responderte personalmente. ¡Gracias!</p>
+            <img class="contacto-calaveritas" src="assets/images/calaveritas.jpg" alt="Calaveritas — Mololo">
+          </div>
+
+          <!-- Derecha: formulario -->
+          <div style="padding-top: 48px;">
+            <div data-fs-success>Mensaje enviado. Te contestaré con la mayor brevedad posible.</div>
+
+            <form id="contacto-form" class="contacto-form">
+              <input type="hidden" name="_subject" value="Contacto desde mololo.es">
+
+              <div class="contacto-field-group">
+                <label class="contacto-label" for="cf-nombre">NOMBRE</label>
+                <input class="contacto-field" id="cf-nombre" type="text" name="nombre" placeholder="Tu nombre" data-fs-field required>
+                <span data-fs-error="nombre"></span>
+              </div>
+
+              <div class="contacto-field-group">
+                <label class="contacto-label" for="cf-email">EMAIL</label>
+                <input class="contacto-field" id="cf-email" type="email" name="email" placeholder="Tu email" data-fs-field required>
+                <span data-fs-error="email"></span>
+              </div>
+
+              <div class="contacto-field-group">
+                <label class="contacto-label" for="cf-mensaje">MENSAJE</label>
+                <textarea class="contacto-field" id="cf-mensaje" name="mensaje" placeholder="Tu mensaje" rows="4" data-fs-field required></textarea>
+                <span data-fs-error="mensaje"></span>
+              </div>
+
+              <div data-fs-error class="contacto-field-group" style="border:none; padding-top:8px;"></div>
+
+              <div class="contacto-actions">
+                <button class="contacto-submit" type="submit" data-fs-submit-btn>ENVIAR</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-legal">
+      <span>© 2026 Mololo</span>
+      <a href="#">Aviso legal</a>
+      <a href="#">Política de privacidad</a>
+      <a href="#">Política de cookies</a>
+    </div>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+    </div>
+  </footer>
+
+  <script src="js/eye-base.js"></script>
+  <script src="js/absent-eye.js"></script>
+  <script>
+    new AbsentEye(0, 0, document.getElementById('nav-eye'));
+
+    const submitBtn = document.querySelector('.contacto-submit');
+    submitBtn.addEventListener('mouseenter', () => submitBtn.classList.toggle('hover-alt'));
+
+    const hamburger = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+  </script>
+
+  <!-- Formspree Ajax -->
+  <script>
+    window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+    formspree('initForm', { formElement: '#contacto-form', formId: 'mvzvjbbv' });
+  </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>

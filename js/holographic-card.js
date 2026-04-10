@@ -92,7 +92,7 @@ class HolographicCard {
   }
 
   _attachEvents() {
-    if (this._isMobileAuto) return;
+    if (this._isMobileAuto || window.matchMedia('(hover: none)').matches) return;
     const c = this._container;
     c.addEventListener('mouseenter', (e) => this._onMouseEnter(e));
     c.addEventListener('mousemove',  (e) => this._onMouseMove(e));
@@ -266,6 +266,10 @@ class HolographicCard {
   }
 
   _startIdleAnimation() {
+    if (window.matchMedia('(hover: none)').matches) {
+      this._drawFrame();
+      return;
+    }
     let tick = 0;
     const SPEED = 0.0018;
     const loop = () => {
