@@ -217,11 +217,13 @@
       <div class="newsletter-inner">
         <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
         <h3 class="newsletter-titulo">Suscríbete a nuestra newsletter</h3>
-        <form class="newsletter-form" onsubmit="return false">
-          <input class="newsletter-input" type="email" placeholder="email">
-          <button class="newsletter-submit" id="nl-submit" type="submit">SUBMIT</button>
+        <form class="newsletter-form" id="nl-form">
+          <input class="newsletter-input" type="email" name="EMAIL" placeholder="email" required>
+          <div style="visibility:hidden;position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true"><input type="text" name="b_276dfd967b8cc6a77df406b2b_a4e99d727c" tabindex="-1" value=""></div>
+          <button class="newsletter-submit" id="nl-submit" type="button">SUSCRIBIRSE</button>
         </form>
-        <p class="newsletter-sub">Consigue acceso a ofertas exclusivas y ediciones limitadas.</p>
+        <p class="newsletter-ok" id="nl-ok" style="display:none;">¡Gracias! Te hemos añadido a la lista.</p>
+        <p class="newsletter-sub" id="nl-sub">Consigue acceso a ofertas exclusivas y ediciones limitadas.</p>
         <img class="newsletter-calaveritas" src="assets/source/calaveritas.jpg" alt="Calaveritas — Mololo">
       </div>
       </div>
@@ -241,8 +243,8 @@
       <a href="#">Contacto</a>
     </div>
     <div class="footer-social">
-      <a href="#">Instagram</a>
-      <a href="#">Pinterest</a>
+      <a href="https://www.instagram.com/mololo.es/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://tienda.mololo.es" target="_blank" rel="noopener">Tienda</a>
     </div>
   </footer>
 

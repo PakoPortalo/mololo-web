@@ -460,3 +460,68 @@ mobileMenu.querySelectorAll('a').forEach(a => {
     img.addEventListener('load', initLens);
   }
 })();
+
+
+// ================================
+// NEWSLETTER: suscripción Mailchimp sin salir de la página
+// ================================
+(function () {
+  const form = document.getElementById('nl-form');
+  const ok   = document.getElementById('nl-ok');
+  if (!form || !ok) return;
+
+  let sending = false;
+
+  function subscribe() {
+    if (sending) return;
+    const email = form.querySelector('[name="EMAIL"]').value.trim();
+    if (!email) return;
+    sending = true;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="nl-spinner"></span>';
+
+    const base = 'https://gmail.us8.list-manage.com/subscribe/post-json';
+    const params = new URLSearchParams({
+      u: '276dfd967b8cc6a77df406b2b',
+      id: 'a4e99d727c',
+      f_id: '008d11e1f0',
+      EMAIL: email,
+      'b_276dfd967b8cc6a77df406b2b_a4e99d727c': '',
+    });
+    const cbName = 'mc_cb_' + Date.now();
+    params.set('c', cbName);
+
+    window[cbName] = function (data) {
+      delete window[cbName];
+      document.head.removeChild(script);
+
+      const fadeEls = [form, document.getElementById('nl-sub'), document.querySelector('.newsletter-titulo')];
+      const msg = (data.msg && (data.msg.includes('already') || data.msg.includes('ya')))
+        ? '¡Ya estás en la lista!'
+        : '¡Gracias, ya eres parte de mololo!';
+
+      fadeEls.forEach(el => el && (el.style.opacity = '0'));
+      setTimeout(() => {
+        fadeEls.forEach(el => el && (el.style.display = 'none'));
+        ok.textContent = msg;
+        ok.style.display = 'block';
+        requestAnimationFrame(() => requestAnimationFrame(() => { ok.style.opacity = '1'; }));
+      }, 500);
+    };
+
+    const script = document.createElement('script');
+    script.src = base + '?' + params.toString();
+    document.head.appendChild(script);
+  }
+
+  const btn = form.querySelector('#nl-submit');
+
+  btn.addEventListener('click', function () {
+    const emailInput = form.querySelector('[name="EMAIL"]');
+    if (!emailInput.value.trim() || !emailInput.checkValidity()) {
+      emailInput.reportValidity();
+      return;
+    }
+    subscribe();
+  });
+})();

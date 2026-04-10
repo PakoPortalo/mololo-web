@@ -163,7 +163,7 @@ nav {
   transition: max-height 0.3s ease;
 }
 .nav-mobile-menu.open {
-  max-height: 200px;
+  max-height: 280px;
   box-shadow: 0 1px 0 #e8e8e8;
 }
 .nav-mobile-menu a {
@@ -715,6 +715,26 @@ main { padding-top: 60px; }
   margin-bottom: 16px;
 }
 
+.newsletter-titulo,
+.newsletter-sub,
+.newsletter-form {
+  transition: opacity 0.5s ease;
+}
+
+.newsletter-ok {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  background: var(--black);
+  padding: 6px 18px;
+  align-self: center;
+  text-align: center;
+  margin-top: 12px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
 .newsletter-eye-wrapper {
   width: 120px;
   height: 120px;
@@ -773,6 +793,22 @@ main { padding-top: 60px; }
   border: 1px solid var(--black);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes nl-spin {
+  to { transform: rotate(360deg); }
+}
+
+.nl-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: nl-spin 0.7s linear infinite;
 }
 .newsletter-submit.hover-alt:hover { background: var(--orange); color: var(--white); border-color: var(--orange); }
 .newsletter-submit:not(.hover-alt):hover { background: var(--pink); color: var(--black); border-color: var(--pink); }

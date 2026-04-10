@@ -20,6 +20,10 @@ Cambios pendientes para dejar la página fina. Se abordan uno por uno en orden.
 - [x] **4. Subpágina `/contacto` con formulario**
   Crear una página `/contacto` (nuevo HTML) enlazada desde el botón "CONTACTO" del navbar. Formulario sencillo que genere un correo (nombre, email, mensaje). Sin dependencias externas si es posible.
 
+  - [x] ~~Navbar: al añadir ENCARGOS, el texto "CONTACTO" quedaba recortado en algunos tamaños.~~
+
+
+
 - [ ] **5. Calaveritas animadas — líquido burbujeante**
   Las 3 calaveritas al final del newsletter tienen una parte roja en los ojos. Animar esa parte roja para que parezca un líquido que sube y acaba en pompitas (animación CSS/canvas).
 
