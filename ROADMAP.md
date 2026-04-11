@@ -1,43 +1,39 @@
 # Hoja de ruta — Mololo Web
 
-Cambios pendientes para dejar la página fina. Se abordan uno por uno en orden.
+Cambios pendientes por orden de prioridad.
 
 ---
 
-## Tareas pendientes
+## 🔴 Crítico — Legal / RGPD
 
-- [ ] **6. Footer — revisión y mejora visual**
-  Darle una vuelta al footer: estructura, tipografía, espaciados, jerarquía. Dejarlo a la altura del resto de la página. Incluye modales para textos legales (Aviso legal, Política de privacidad) generados con Iubenda. Quitar "Política de cookies" (no aplica con Umami).
+- [ ] **L1. Newsletter sin consentimiento explícito** — Añadir checkbox de aceptación y enlace a política de privacidad antes del botón de suscripción. Obligatorio por RGPD; Mailchimp puede suspender la cuenta sin esto.
+- [ ] **L2. Formulario de contacto sin aviso de tratamiento de datos** — Indicar cómo se tratan los datos recogidos por Formspree.
+- [ ] **L3. Footer inconsistente entre páginas** — `index.html` tiene 6 links legales, `contacto.html` solo 3. Todos apuntan a `#`. Unificar y enlazar las políticas reales de Iubenda.
+- [ ] **L4. Quitar "Política de cookies"** — Umami cloud es cookieless. El link sobra y puede confundir.
+- [ ] **L5. `tienda.mololo.es` vs `shop.mololo.es`** — El footer social apunta a `tienda.mololo.es`, el navbar a `shop.mololo.es`. Unificar al dominio correcto. *(Decidir cuál es el bueno antes de tocar Iubenda.)*
 
 ---
 
-## Auditoría técnica — pendiente
+## 🟠 Importante — Rendimiento y SEO
 
-Resultados del análisis profundo del código. Por orden de impacto:
+- [ ] **P1. Convertir imágenes a WebP** — `hoodie-mololo.png` (1.3MB) y `calaveritas.jpg` (1.1MB) son los más urgentes. WebP supone ~60-70% menos peso. Afecta directamente a Core Web Vitals.
+- [ ] **P2. `og:image` apunta al dominio viejo** — Corregir `pakoportalo.github.io/mololo-web/...` → `https://mololo.es/...`. Afecta a la previsualización al compartir en WhatsApp y redes.
+- [ ] **P3. Google Fonts sin `preconnect`** — Añadir `<link rel="preconnect" href="https://fonts.googleapis.com">` en ambas páginas.
+- [ ] **P4. Sin `apple-touch-icon` ni `manifest.json`** — Si alguien guarda la web en el home screen del móvil no tiene icono. Fácil de añadir.
 
-### SEO
-- [x] **S1. `meta name="description"`** — Añadido en `index.html` y `contacto.html`.
-- [x] **S2. `<h1>` en index.html** — Añadido visually-hidden en el hero. También añadida clase `.visually-hidden` en `landing.css`.
-- [x] **S3. `<link rel="canonical">`** — Añadido en ambas páginas apuntando a `mololo.es`.
-- [x] **S4. `og:url` correcto** — Actualizado a `https://mololo.es/`.
-- [x] **S5. Structured data JSON-LD** — Añadido en `index.html`. Tipo `Person` con nombre, descripción, Instagram y tienda.
+---
 
-### Imágenes
-- [x] **I1. Renombrar y comprimir `cuadro2.jpg` → `cuadro-sapien.jpg`** — De 4MB a 737KB (82% menos). 2000px ancho, 85% calidad.
-- [x] **I2. `cuadro-2-resized.png`** — Eliminado, no se usaba.
-- [x] **I3. Lazy loading** — Añadido en todas las imágenes below-fold de `index.html` y `contacto.html`.
+## 🟡 Menor — Calidad de código
 
-### CSS / HTML
-- [x] **C1. CSS de contacto inline → `landing.css`** — Movido. `contacto.html` ya no tiene bloque `<style>`.
-- [x] **C2. `width: 100vw` en body** — Corregido a `width: 100%` en `landing.css`.
+- [ ] **C1. `contacto.html` sin `defer` en sus scripts** — Inconsistente con `index.html`. Menor impacto pero fácil de corregir.
+- [ ] **C2. Links `+ info` de productos apuntan a `#`** — Los 6 botones no van a ningún sitio. Enlazar a la tienda o eliminar el botón. *(Decisión de contenido primero.)*
+- [ ] **C3. `contacto.html` sin Open Graph ni JSON-LD** — Al compartir el link de contacto no aparece imagen ni título correcto.
 
-### JavaScript
-- [x] **J1. Consolidar listeners `mousemove`** — Unificados en un único listener en `landing.js`. Los módulos desktop-only se registran via `_mouseMoveCallbacks.push()`.
-- [x] **J2. `defer` en scripts** — Añadido `defer` a los 5 scripts locales de `index.html`.
-- [x] **J3. Variable global `lastMouseEvent`** — Movida a `window.Mololo.lastMouseEvent` (namespace en `tracker-eye.js`). Todas las referencias actualizadas.
+---
 
-### Accesibilidad
-- [x] **A1. `:focus-visible`** — Añadidos estilos de foco por zona en `landing.css`. Naranja: navbar, productos, encargos, footer legal, contacto. Rosa: hero, newsletter, footer social.
+## Pendiente mayor — Footer + Iubenda
+
+- [ ] **6. Footer — revisión visual y legal** — Estructura, tipografía, espaciados. Incluye integrar los documentos generados con Iubenda (Aviso legal, Política de privacidad). Depende de resolver L1–L5 primero.
 
 ---
 
