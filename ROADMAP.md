@@ -23,9 +23,9 @@ Resultados del análisis profundo del código. Por orden de impacto:
 - [x] **S5. Structured data JSON-LD** — Añadido en `index.html`. Tipo `Person` con nombre, descripción, Instagram y tienda.
 
 ### Imágenes
-- [ ] **I1. Comprimir `cuadro2.jpg`** — Pesa 4MB y se carga dos veces en memoria (DOM + canvas). Mayor lastre de rendimiento.
-- [ ] **I2. `cuadro-2-resized.png` → WebP/JPEG** — PNG de fotografía pesa 2.5MB innecesariamente.
-- [ ] **I3. Lazy loading** — Ninguna imagen tiene `loading="lazy"`. Las imágenes below-fold se cargan al inicio.
+- [x] **I1. Renombrar y comprimir `cuadro2.jpg` → `cuadro-sapien.jpg`** — De 4MB a 737KB (82% menos). 2000px ancho, 85% calidad.
+- [x] **I2. `cuadro-2-resized.png`** — Eliminado, no se usaba.
+- [x] **I3. Lazy loading** — Añadido en todas las imágenes below-fold de `index.html` y `contacto.html`.
 
 ### CSS / HTML
 - [ ] **C1. CSS de contacto inline → `landing.css`** — 192 líneas de `<style>` dentro de `contacto.html`. Mover a la hoja de estilos.
