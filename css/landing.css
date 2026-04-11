@@ -1265,6 +1265,18 @@ textarea.contacto-field {
   gap: 16px;
   margin-top: 32px;
 }
+.contacto-legal {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  color: rgba(0,0,0,0.4);
+  line-height: 1.5;
+  margin-top: 12px;
+  text-align: center;
+}
+.contacto-legal a {
+  color: rgba(0,0,0,0.4);
+  text-decoration: underline;
+}
 
 .contacto-submit {
   font-family: var(--font-display);
