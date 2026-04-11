@@ -6,7 +6,7 @@ Cambios pendientes por orden de prioridad.
 
 ## 🔴 Crítico — Legal / RGPD
 
-- [ ] **L1. Newsletter sin consentimiento explícito** — Añadir checkbox de aceptación y enlace a política de privacidad antes del botón de suscripción. Obligatorio por RGPD; Mailchimp puede suspender la cuenta sin esto.
+- [x] **L1. Newsletter sin consentimiento explícito** — Checkbox de aceptación con link a política de privacidad. Validación custom en JS, mensaje de error en rojo.
 - [ ] **L2. Formulario de contacto sin aviso de tratamiento de datos** — Indicar cómo se tratan los datos recogidos por Formspree.
 - [ ] **L3. Footer inconsistente entre páginas** — `index.html` tiene 6 links legales, `contacto.html` solo 3. Todos apuntan a `#`. Unificar y enlazar las políticas reales de Iubenda.
 - [ ] **L4. Quitar "Política de cookies"** — Umami cloud es cookieless. El link sobra y puede confundir.
