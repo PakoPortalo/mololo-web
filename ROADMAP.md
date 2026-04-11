@@ -28,8 +28,8 @@ Resultados del análisis profundo del código. Por orden de impacto:
 - [x] **I3. Lazy loading** — Añadido en todas las imágenes below-fold de `index.html` y `contacto.html`.
 
 ### CSS / HTML
-- [ ] **C1. CSS de contacto inline → `landing.css`** — 192 líneas de `<style>` dentro de `contacto.html`. Mover a la hoja de estilos.
-- [ ] **C2. `width: 100vw` en body** — Causa overflow horizontal oculto con `overflow-x: hidden`. Cambiar a `width: 100%`.
+- [x] **C1. CSS de contacto inline → `landing.css`** — Movido. `contacto.html` ya no tiene bloque `<style>`.
+- [x] **C2. `width: 100vw` en body** — Corregido a `width: 100%` en `landing.css`.
 
 ### JavaScript
 - [ ] **J1. Consolidar listeners `mousemove`** — Hay 3 listeners independientes en `landing.js` (líneas 11, 25, 233). Unificarlos.

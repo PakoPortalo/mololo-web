@@ -52,7 +52,7 @@
    BODY
 ================================ */
 body {
-  width: 100vw;
+  width: 100%;
   height: auto;
   min-height: 100svh;
   background: white;
@@ -989,4 +989,192 @@ footer {
   .newsletter-inner {
     width: 100%;
   }
+}
+
+/* ================================
+   PÁGINA CONTACTO
+================================ */
+.contacto {
+  padding: 0 48px 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--white);
+  height: calc(100svh - 76px);
+  margin-top: 40px;
+  overflow: hidden;
+}
+
+.contacto-wrapper {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contacto-calaveritas {
+  width: 75%;
+  height: auto;
+  display: block;
+  margin-top: 0;
+}
+
+.contacto-body {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 48px;
+  align-items: start;
+}
+.contacto-info      { grid-column: 1; grid-row: 1; }
+.contacto-form-col  { grid-column: 2; grid-row: 1 / 3; }
+.contacto-calaveritas { grid-column: 1; grid-row: 2; }
+
+.contacto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 0;
+}
+.contacto-info .newsletter-pretitulo {
+  margin-bottom: 0;
+}
+
+.contacto-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+
+.contacto-sub {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.75;
+  color: rgba(0,0,0,0.55);
+  max-width: 340px;
+}
+
+.contacto-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contacto-field-group {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  padding: 18px 0 8px;
+  transition: border-color 0.2s;
+}
+.contacto-field-group:focus-within {
+  border-color: var(--black);
+}
+
+.contacto-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  color: rgba(0,0,0,0.35);
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.contacto-field-group:focus-within .contacto-label {
+  color: var(--black);
+}
+
+.contacto-field {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--black);
+  width: 100%;
+  padding: 0;
+}
+.contacto-field::placeholder { color: transparent; }
+
+textarea.contacto-field {
+  resize: none;
+  min-height: 80px;
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+[data-fs-error] {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: #c0392b;
+  margin-top: 4px;
+  display: none;
+}
+
+.contacto-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.contacto-submit {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  padding: 13px 48px;
+  background: var(--black);
+  color: var(--white);
+  border: 1px solid var(--black);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.contacto-submit.hover-alt:hover  { background: var(--orange); color: var(--white); border-color: var(--orange); }
+.contacto-submit:not(.hover-alt):hover { background: var(--pink); color: var(--black); border-color: var(--pink); }
+.contacto-submit:disabled { opacity: 0.45; cursor: default; }
+
+[data-fs-success] {
+  font-family: var(--font-body) !important;
+  font-size: 1rem !important;
+  line-height: 1.75 !important;
+  color: var(--orange) !important;
+  background: none !important;
+  border: none !important;
+  padding: 16px 0 8px !important;
+  display: none;
+}
+
+.contacto-gracias {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: rgba(0,0,0,0.38);
+  text-align: center;
+}
+
+@media (min-width: 769px) {
+  .contacto { margin-top: 80px; }
+}
+
+@media (max-width: 768px) {
+  .contacto {
+    height: auto;
+    padding: 0 24px 56px;
+    overflow: visible;
+  }
+  .contacto-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 16px;
+  }
+  .contacto-info     { grid-column: 1; grid-row: 1; order: 1; }
+  .contacto-form-col { grid-column: 1; grid-row: 2; order: 2; }
+  .contacto-calaveritas { grid-column: 1; grid-row: 3; order: 3; width: 60%; margin: 0 auto; }
+  textarea.contacto-field { min-height: 48px; }
+  .contacto-field-group { padding: 10px 0 6px; }
+  .contacto-actions { margin-top: 16px; gap: 8px; }
+  .contacto-sub { max-width: 100%; }
+  .contacto-info { text-align: center; align-items: center; }
 }
