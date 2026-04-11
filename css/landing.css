@@ -79,9 +79,9 @@
   border-color: var(--pink);
 }
 
-/* — Newsletter input (sin hover, outline rosa) — */
+/* — Newsletter input — */
 .newsletter-input:focus-visible {
-  outline: 2px solid var(--pink);
+  outline: 2px solid var(--black);
   outline-offset: 2px;
 }
 
@@ -867,11 +867,17 @@ main { padding-top: 60px; }
   color: rgba(0,0,0,0.45);
   line-height: 1.5;
   text-align: center;
+  margin-top: -13px;
+  margin-bottom: 10px;
 }
 
 .newsletter-form {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.nl-row {
+  display: flex;
 }
 
 .newsletter-input {
@@ -917,8 +923,58 @@ main { padding-top: 60px; }
 .newsletter-submit.hover-alt:hover { background: var(--orange); color: var(--white); border-color: var(--orange); }
 .newsletter-submit:not(.hover-alt):hover { background: var(--pink); color: var(--black); border-color: var(--pink); }
 
+.nl-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.nl-consent input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid var(--black);
+  background: transparent;
+  cursor: pointer;
+  margin-top: 2px;
+}
+.nl-consent input[type="checkbox"]:checked {
+  background: var(--black);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%23fff' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px 8px;
+}
+.nl-consent span {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(0,0,0,0.45);
+}
+.nl-consent span a {
+  color: rgba(0,0,0,0.45);
+  text-decoration: underline;
+}
+.nl-consent-error {
+  display: none;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: #FF3A3B;
+  text-align: center;
+  margin-top: -6px;
+  margin-bottom: 4px;
+}
+.nl-consent-error.visible {
+  display: block;
+}
+
 .newsletter-calaveritas {
-  width: 50%;
+  width: 62%;
   height: auto;
   display: block;
   align-self: center;

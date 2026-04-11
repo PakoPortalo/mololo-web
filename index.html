@@ -241,13 +241,20 @@
       <div class="newsletter-inner">
         <div class="newsletter-eye-wrapper" id="nl-eye-right"></div>
         <h3 class="newsletter-titulo">Suscríbete a nuestra newsletter</h3>
+        <p class="newsletter-sub" id="nl-sub">¡Consigue acceso a ofertas exclusivas y ediciones limitadas!</p>
         <form class="newsletter-form" id="nl-form">
-          <input class="newsletter-input" type="email" name="EMAIL" placeholder="email" required>
-          <div style="visibility:hidden;position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true"><input type="text" name="b_276dfd967b8cc6a77df406b2b_a4e99d727c" tabindex="-1" value=""></div>
-          <button class="newsletter-submit" id="nl-submit" type="button">SUSCRIBIRSE</button>
+          <div class="nl-row">
+            <input class="newsletter-input" type="email" name="EMAIL" placeholder="email" required>
+            <div style="visibility:hidden;position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true"><input type="text" name="b_276dfd967b8cc6a77df406b2b_a4e99d727c" tabindex="-1" value=""></div>
+            <button class="newsletter-submit" id="nl-submit" type="button">SUSCRIBIRSE</button>
+          </div>
+          <label class="nl-consent">
+            <input type="checkbox" id="nl-consent" name="consent">
+            <span>He leído y acepto la <a href="politica-privacidad.html" target="_blank">política de privacidad</a></span>
+          </label>
+          <p class="nl-consent-error" id="nl-consent-error">Acepta la política de privacidad para continuar</p>
         </form>
         <p class="newsletter-ok" id="nl-ok" style="display:none;">¡Gracias! Te hemos añadido a la lista.</p>
-        <p class="newsletter-sub" id="nl-sub">Consigue acceso a ofertas exclusivas y ediciones limitadas.</p>
         <img class="newsletter-calaveritas" src="assets/images/calaveritas.jpg" alt="Calaveritas — Mololo" loading="lazy">
       </div>
       </div>

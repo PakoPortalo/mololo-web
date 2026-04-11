@@ -549,10 +549,17 @@ mobileMenu.querySelectorAll('a').forEach(a => {
 
   btn.addEventListener('click', function () {
     const emailInput = form.querySelector('[name="EMAIL"]');
+    const consent = form.querySelector('#nl-consent');
+    const consentError = document.getElementById('nl-consent-error');
     if (!emailInput.value.trim() || !emailInput.checkValidity()) {
       emailInput.reportValidity();
       return;
     }
+    if (!consent.checked) {
+      consentError.classList.add('visible');
+      return;
+    }
+    consentError.classList.remove('visible');
     subscribe();
   });
 })();
