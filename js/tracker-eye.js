@@ -1,7 +1,8 @@
 // TrackerEye extends Eye
 // Ojo que sigue el cursor
 
-let lastMouseEvent = null;
+window.Mololo = window.Mololo || {};
+Mololo.lastMouseEvent = null;
 
 class TrackerEye extends Eye {
   constructor(x, y, parent = document.body) {
@@ -26,8 +27,8 @@ class TrackerEye extends Eye {
     this._onMouseUp = () => {
       if (!this.manualBlink) return;
       this.manualBlink = false;
-      const [col, row] = lastMouseEvent
-        ? this.getCursorPosition(lastMouseEvent)
+      const [col, row] = Mololo.lastMouseEvent
+        ? this.getCursorPosition(Mololo.lastMouseEvent)
         : [4, 4];
       this.endBlink(col, row, 10);
     };
@@ -62,8 +63,8 @@ class TrackerEye extends Eye {
     const delay = 2000 + Math.random() * 3000;
     this.autoBlinkTimeout = setTimeout(() => {
       this.startBlink(() => {
-        const [col, row] = lastMouseEvent
-          ? this.getCursorPosition(lastMouseEvent)
+        const [col, row] = Mololo.lastMouseEvent
+          ? this.getCursorPosition(Mololo.lastMouseEvent)
           : [4, 4];
         setTimeout(() => this.endBlink(col, row), 100);
       });

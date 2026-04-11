@@ -32,12 +32,12 @@ Resultados del análisis profundo del código. Por orden de impacto:
 - [x] **C2. `width: 100vw` en body** — Corregido a `width: 100%` en `landing.css`.
 
 ### JavaScript
-- [ ] **J1. Consolidar listeners `mousemove`** — Hay 3 listeners independientes en `landing.js` (líneas 11, 25, 233). Unificarlos.
-- [ ] **J2. `defer` en scripts** — Los scripts de `index.html` están al final del body pero sin `defer`.
-- [ ] **J3. Variable global `lastMouseEvent`** — Declarada en `tracker-eye.js` sin namespace. Riesgo de colisión.
+- [x] **J1. Consolidar listeners `mousemove`** — Unificados en un único listener en `landing.js`. Los módulos desktop-only se registran via `_mouseMoveCallbacks.push()`.
+- [x] **J2. `defer` en scripts** — Añadido `defer` a los 5 scripts locales de `index.html`.
+- [x] **J3. Variable global `lastMouseEvent`** — Movida a `window.Mololo.lastMouseEvent` (namespace en `tracker-eye.js`). Todas las referencias actualizadas.
 
 ### Accesibilidad
-- [ ] **A1. `:focus-visible`** — Sin estilos de foco para navegación con teclado en `landing.css`.
+- [x] **A1. `:focus-visible`** — Añadidos estilos de foco por zona en `landing.css`. Naranja: navbar, productos, encargos, footer legal, contacto. Rosa: hero, newsletter, footer social.
 
 ---
 

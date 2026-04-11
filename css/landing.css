@@ -36,6 +36,94 @@
   border: 0;
 }
 
+/* Focus visible — navegación por teclado
+   Los botones y links simulan el estado hover al recibir foco.
+   En campos de texto (sin hover definido): indicador de línea.    */
+
+/* — Navbar: logo (primer tab) — */
+.nav-left a:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+/* — Navbar links — */
+.nav-links a:focus-visible,
+.nav-mobile-menu a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+
+/* — Hamburger (sin hover definido, outline sutil) — */
+.nav-hamburger:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 4px;
+}
+
+/* — Hero: btn-tienda — */
+.btn-tienda:focus-visible {
+  outline: none;
+  background: var(--pink);
+}
+
+/* — Productos: "+ info" links — */
+.producto-info:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+/* — Productos + Encargos: btn-ver-mas — */
+.btn-ver-mas:focus-visible {
+  outline: none;
+  background: var(--pink);
+  color: var(--black);
+  border-color: var(--pink);
+}
+
+/* — Newsletter input (sin hover, outline rosa) — */
+.newsletter-input:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 2px;
+}
+
+/* — Newsletter submit — */
+.newsletter-submit:focus-visible {
+  outline: none;
+  background: var(--pink);
+  color: var(--black);
+  border-color: var(--pink);
+}
+
+/* — Footer links — */
+.footer-legal a:focus-visible,
+.footer-social a:focus-visible {
+  outline: none;
+  color: var(--black);
+}
+
+/* — Contacto: campos (sin hover, línea naranja bajo el texto) — */
+.contacto-field:focus-visible {
+  outline: none;
+  box-shadow: 0 2px 0 var(--orange);
+}
+
+/* — Contacto: botón enviar — */
+.contacto-submit:focus-visible {
+  outline: none;
+  background: var(--pink);
+  color: var(--black);
+  border-color: var(--pink);
+}
+
+/* — Tab stops de contenido (sin outline) — */
+.artista-header-titulo h2:focus-visible,
+.artista-body p:focus-visible,
+.artista-pull-quote:focus-visible,
+#artista-holo-card:focus-visible,
+#cuadro-marco:focus-visible,
+.encargos-titulo:focus-visible {
+  outline: none;
+}
+
 /* ================================
    VARIABLES
 ================================ */
@@ -641,7 +729,8 @@ main { padding-top: 60px; }
   cursor: default;
 }
 .artista-pull-quote:hover,
-.artista-pull-quote.scroll-active { filter: grayscale(0) brightness(1); }
+.artista-pull-quote.scroll-active,
+.artista-pull-quote:focus-visible { filter: grayscale(0) brightness(1); }
 .il-candidate { transition: color 5s ease-in-out; }
 
 .artista-holo {

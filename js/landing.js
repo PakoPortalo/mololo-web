@@ -5,12 +5,15 @@
 // Navbar: AbsentEye
 new AbsentEye(0, 0, document.getElementById('nav-eye'));
 
-// Newsletter: TrackerEye (lastMouseEvent declarado en tracker-eye.js)
+// Newsletter: TrackerEye (Mololo.lastMouseEvent declarado en tracker-eye.js)
 const eyeR = new TrackerEye(0, 0, document.getElementById('nl-eye-right'));
 
+// Listener único de mousemove — los módulos desktop-only se registran aquí
+const _mouseMoveCallbacks = [];
 document.addEventListener('mousemove', (e) => {
-  lastMouseEvent = e;
+  Mololo.lastMouseEvent = e;
   eyeR.updateFromCursor(e);
+  _mouseMoveCallbacks.forEach(fn => fn(e));
 });
 
 
@@ -22,7 +25,7 @@ if (!window.matchMedia('(max-width: 768px)').matches) {
   const strength = 25;
   let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
-  document.addEventListener('mousemove', (e) => {
+  _mouseMoveCallbacks.push((e) => {
     targetX = ((e.clientX / window.innerWidth) - 0.5) * strength;
     targetY = ((e.clientY / window.innerHeight) - 0.5) * strength;
   });
@@ -193,6 +196,34 @@ new IntersectionObserver(([entry]) => {
   });
 });
 
+// Tab stops de contenido: scroll síncrono al recibir foco
+// (evita el desfase del scroll-into-view asíncrono del navegador)
+(function () {
+  const stops = document.querySelectorAll(
+    '.artista-header-titulo h2[tabindex], .artista-body p[tabindex], ' +
+    '.artista-pull-quote[tabindex], #artista-holo-card[tabindex], ' +
+    '.encargos-titulo[tabindex]'
+  );
+  stops.forEach(el => {
+    el.addEventListener('focus', () => {
+      const rect = el.getBoundingClientRect();
+      const targetY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+      window.scrollTo(0, Math.max(0, targetY));
+    });
+  });
+})();
+
+// Cuadro-marco: al recibir foco, scroll idéntico al botón ENCARGOS del navbar
+const cuadroMarco = document.getElementById('cuadro-marco');
+if (cuadroMarco) {
+  cuadroMarco.addEventListener('focus', () => {
+    const target = document.querySelector('#encargos');
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+}
+
 
 // ================================
 // HAMBURGER MENU
@@ -230,7 +261,7 @@ mobileMenu.querySelectorAll('a').forEach(a => {
     requestAnimationFrame(animate);
   })();
 
-  document.addEventListener('mousemove', (e) => {
+  _mouseMoveCallbacks.push((e) => {
     const rect = obraH2.getBoundingClientRect();
     cursorMap.setAttribute('x', e.clientX - rect.left - RADIUS);
     cursorMap.setAttribute('y', e.clientY - rect.top - RADIUS);
