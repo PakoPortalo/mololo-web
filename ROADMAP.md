@@ -4,40 +4,41 @@ Cambios pendientes para dejar la página fina. Se abordan uno por uno en orden.
 
 ---
 
-## Tareas
-
-- [x] **1. Navbar — fade in/out más lento del saludo**
-  Hacer más lento el ciclo de transición de "hola, hello…" en el navbar (actualmente demasiado rápido).
-
-- [x] **2. Hero parallax — sombra interior en la imagen**
-  La imagen de la derecha en el hero se mueve con el cursor (parallax). Añadirle una sombra en sus bordes, apuntando hacia el centro, para enfatizar que está "detrás" de los demás elementos.
-
-- [x] **3. Sección "Encargos" — texto + botón + enlace navbar**
-  - Después del módulo Sapien sobre sapien (cuadro-lupa) y antes del newsletter, añadir una sección con texto tipo "se pueden encargar cuadros de este tipo, podemos hablar un poco el concepto".
-  - Añadir un botón estilo los existentes que diga "más información" y apunte a `shop.mololo.es`.
-  - Añadir un enlace en el navbar que scrollee hasta esta sección.
-
-- [x] **4. Subpágina `/contacto` con formulario**
-  Crear una página `/contacto` (nuevo HTML) enlazada desde el botón "CONTACTO" del navbar. Formulario sencillo que genere un correo (nombre, email, mensaje). Sin dependencias externas si es posible.
-
-  - [x] ~~Navbar: al añadir ENCARGOS, el texto "CONTACTO" quedaba recortado en algunos tamaños.~~
-
-
-
-- [ ] **5. Calaveritas animadas — líquido burbujeante**
-  Las 3 calaveritas al final del newsletter tienen una parte roja en los ojos. Animar esa parte roja para que parezca un líquido que sube y acaba en pompitas (animación CSS/canvas).
+## Tareas pendientes
 
 - [ ] **6. Footer — revisión y mejora visual**
-  Darle una vuelta al footer: estructura, tipografía, espaciados, jerarquía. Dejarlo a la altura del resto de la página.
-
-- [ ] **7. Analytics**
-  Investigar opciones (Google Analytics, Plausible, Umami…) y elegir la que mejor encaje. Integrar en la página.
+  Darle una vuelta al footer: estructura, tipografía, espaciados, jerarquía. Dejarlo a la altura del resto de la página. Incluye modales para textos legales (Aviso legal, Política de privacidad) generados con Iubenda. Quitar "Política de cookies" (no aplica con Umami).
 
 ---
 
-- [x] **8. Holographic card — desactivar interacción táctil en móvil**
-  En móvil el toque movía la calavera. Ahora en dispositivos táctiles no se adjuntan eventos de ratón y la tarjeta hace su animación autónoma (`startMobileAnimation`).
+## Auditoría técnica — pendiente
+
+Resultados del análisis profundo del código. Por orden de impacto:
+
+### SEO
+- [x] **S1. `meta name="description"`** — Añadido en `index.html` y `contacto.html`.
+- [x] **S2. `<h1>` en index.html** — Añadido visually-hidden en el hero. También añadida clase `.visually-hidden` en `landing.css`.
+- [x] **S3. `<link rel="canonical">`** — Añadido en ambas páginas apuntando a `mololo.es`.
+- [x] **S4. `og:url` correcto** — Actualizado a `https://mololo.es/`.
+- [x] **S5. Structured data JSON-LD** — Añadido en `index.html`. Tipo `Person` con nombre, descripción, Instagram y tienda.
+
+### Imágenes
+- [ ] **I1. Comprimir `cuadro2.jpg`** — Pesa 4MB y se carga dos veces en memoria (DOM + canvas). Mayor lastre de rendimiento.
+- [ ] **I2. `cuadro-2-resized.png` → WebP/JPEG** — PNG de fotografía pesa 2.5MB innecesariamente.
+- [ ] **I3. Lazy loading** — Ninguna imagen tiene `loading="lazy"`. Las imágenes below-fold se cargan al inicio.
+
+### CSS / HTML
+- [ ] **C1. CSS de contacto inline → `landing.css`** — 192 líneas de `<style>` dentro de `contacto.html`. Mover a la hoja de estilos.
+- [ ] **C2. `width: 100vw` en body** — Causa overflow horizontal oculto con `overflow-x: hidden`. Cambiar a `width: 100%`.
+
+### JavaScript
+- [ ] **J1. Consolidar listeners `mousemove`** — Hay 3 listeners independientes en `landing.js` (líneas 11, 25, 233). Unificarlos.
+- [ ] **J2. `defer` en scripts** — Los scripts de `index.html` están al final del body pero sin `defer`.
+- [ ] **J3. Variable global `lastMouseEvent`** — Declarada en `tracker-eye.js` sin namespace. Riesgo de colisión.
+
+### Accesibilidad
+- [ ] **A1. `:focus-visible`** — Sin estilos de foco para navegación con teclado en `landing.css`.
 
 ---
 
-*Última actualización: 2026-04-10*
+*Última actualización: 2026-04-11*
