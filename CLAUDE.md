@@ -2,6 +2,11 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Normas de trabajo
+
+- **Nunca hacer `git push` sin permiso explícito del usuario.** Commitear está bien; pushear, nunca sin que lo pidan.
+- **Nunca añadir `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>`** ni ninguna línea Co-Authored-By en los mensajes de commit.
+
 ## Project overview
 
 Static website for **Mololo by Pako Portalo** — arte original y ediciones limitadas. Single-page landing with vanilla JS, no build system. Deployed to GitHub Pages at `pakoportalo.github.io/mololo-web/`.
