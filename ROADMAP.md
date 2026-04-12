@@ -25,9 +25,9 @@ Cambios pendientes por orden de prioridad.
 
 ## 🟡 Menor — Calidad de código
 
-- [ ] **C1. `contacto.html` sin `defer` en sus scripts** — Inconsistente con `index.html`. Menor impacto pero fácil de corregir.
-- [ ] **C2. Links `+ info` de productos apuntan a `#`** — Los 6 botones no van a ningún sitio. Enlazar a la tienda o eliminar el botón. *(Decisión de contenido primero.)*
-- [ ] **C3. `contacto.html` sin Open Graph ni JSON-LD** — Al compartir el link de contacto no aparece imagen ni título correcto.
+- [x] **C1. `contacto.html` sin `defer` en sus scripts** — Añadido `defer` a eye-base.js y absent-eye.js.
+- [x] **C2. Links `+ info` de productos apuntan a `#`** — Los 6 botones apuntan a shop.mololo.es mientras se publican los productos.
+- [x] **C3. `contacto.html` sin Open Graph ni JSON-LD** — Añadidas etiquetas og: y JSON-LD (ContactPage + Person).
 
 ---
 
