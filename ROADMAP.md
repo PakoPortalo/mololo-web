@@ -7,10 +7,10 @@ Cambios pendientes por orden de prioridad.
 ## 🔴 Crítico — Legal / RGPD
 
 - [x] **L1. Newsletter sin consentimiento explícito** — Checkbox de aceptación con link a política de privacidad. Validación custom en JS, mensaje de error en rojo.
-- [ ] **L2. Formulario de contacto sin aviso de tratamiento de datos** — Indicar cómo se tratan los datos recogidos por Formspree.
-- [ ] **L3. Footer inconsistente entre páginas** — `index.html` tiene 6 links legales, `contacto.html` solo 3. Todos apuntan a `#`. Unificar y enlazar las políticas reales de Iubenda.
-- [ ] **L4. Quitar "Política de cookies"** — Umami cloud es cookieless. El link sobra y puede confundir.
-- [ ] **L5. `tienda.mololo.es` vs `shop.mololo.es`** — El footer social apunta a `tienda.mololo.es`, el navbar a `shop.mololo.es`. Unificar al dominio correcto. *(Decidir cuál es el bueno antes de tocar Iubenda.)*
+- [x] **L2. Formulario de contacto sin aviso de tratamiento de datos** — Indicar cómo se tratan los datos recogidos por Formspree.
+- [x] **L3. Footer inconsistente entre páginas** — Unificado en los tres archivos: © · Política de privacidad · Contacto / Instagram · Tienda.
+- [x] **L4. Quitar "Política de cookies"** — Eliminado del footer. Umami cloud es cookieless.
+- [x] **L5. `tienda.mololo.es` vs `shop.mololo.es`** — Unificado a `shop.mololo.es` en todos los footers.
 
 ---
 
@@ -37,4 +37,4 @@ Cambios pendientes por orden de prioridad.
 
 ---
 
-*Última actualización: 2026-04-11*
+*Última actualización: 2026-04-12*
