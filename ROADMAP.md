@@ -16,10 +16,10 @@ Cambios pendientes por orden de prioridad.
 
 ## 🟠 Importante — Rendimiento y SEO
 
-- [ ] **P1. Convertir imágenes a WebP** — `hoodie-mololo.png` (1.3MB) y `calaveritas.jpg` (1.1MB) son los más urgentes. WebP supone ~60-70% menos peso. Afecta directamente a Core Web Vitals.
-- [ ] **P2. `og:image` apunta al dominio viejo** — Corregir `pakoportalo.github.io/mololo-web/...` → `https://mololo.es/...`. Afecta a la previsualización al compartir en WhatsApp y redes.
-- [ ] **P3. Google Fonts sin `preconnect`** — Añadir `<link rel="preconnect" href="https://fonts.googleapis.com">` en ambas páginas.
-- [ ] **P4. Sin `apple-touch-icon` ni `manifest.json`** — Si alguien guarda la web en el home screen del móvil no tiene icono. Fácil de añadir.
+- [x] **P1. Convertir imágenes a WebP** — `hoodie-mololo.png` (1.3MB → 64KB, −95%) y `calaveritas.jpg` (1.1MB → 150KB, −86%).
+- [x] **P2. `og:image` apunta al dominio viejo** — Corregido a `https://mololo.es/...`.
+- [x] **P3. Google Fonts sin `preconnect`** — Añadido en index.html, contacto.html y politica-privacidad.html.
+- [x] **P4. Sin `apple-touch-icon` ni `manifest.json`** — Añadidos con el skull como icono (180px, 192px, 512px).
 
 ---
 
