@@ -73,7 +73,7 @@ if (!window.matchMedia('(max-width: 768px)').matches) {
 // HOLOGRAPHIC CARD
 // ================================
 const holoCard = new HolographicCard(document.getElementById('artista-holo-card'), {
-  src: 'assets/images/skull.png',
+  src: 'assets/images/skull.webp',
   width: 240,
   height: 240,
 });
