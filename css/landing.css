@@ -514,7 +514,7 @@ main { padding-top: 60px; }
   font-family: var(--font-body);
   font-size: 0.8rem;
   letter-spacing: 0.05em;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0,0,0,0.6);
   text-decoration: none;
   margin-top: -8px;
 }
@@ -864,7 +864,7 @@ main { padding-top: 60px; }
 .newsletter-sub {
   font-family: var(--font-body);
   font-size: 0.82rem;
-  color: rgba(0,0,0,0.45);
+  color: rgba(0,0,0,0.6);
   line-height: 1.5;
   text-align: center;
   margin-top: -13px;
@@ -1006,7 +1006,7 @@ footer {
   font-family: var(--font-body);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0,0,0,0.6);
   text-decoration: none;
 }
 .footer-legal a:hover { color: var(--black); }
