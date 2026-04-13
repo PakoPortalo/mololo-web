@@ -6,7 +6,7 @@
   <title>Contacto — Mololo by Pako Portalo</title>
   <meta name="description" content="Contacta con el equipo de Mololo — Encargos, dudas o simplemente saludar.">
   <link rel="canonical" href="https://mololo.es/contacto.html">
-  <link rel="icon" type="image/png" href="assets/images/Mololo_Logo_Bg.png">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +18,9 @@
   <meta property="og:description" content="Contacta con el equipo de Mololo — Encargos, dudas o simplemente saludar.">
   <meta property="og:image" content="https://mololo.es/assets/images/hero/hero.webp">
   <meta property="og:url" content="https://mololo.es/contacto.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://mololo.es/assets/images/hero/hero.webp">
+  <meta name="theme-color" content="#111111">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -137,7 +140,8 @@
     new AbsentEye(0, 0, document.getElementById('nav-eye'));
 
     const submitBtn = document.querySelector('.contacto-submit');
-    submitBtn.addEventListener('mouseenter', () => submitBtn.classList.toggle('hover-alt'));
+    submitBtn.addEventListener('mouseenter', () => submitBtn.classList.add('hover-alt'));
+    submitBtn.addEventListener('mouseleave', () => submitBtn.classList.remove('hover-alt'));
 
 
     const hamburger = document.getElementById('nav-hamburger');

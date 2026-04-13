@@ -6,7 +6,7 @@
   <title>Mololo — Arte original y ediciones limitadas</title>
   <meta name="description" content="Mololo — Cuadros, serigrafías, cerámica y más. Obras de arte del artista Pako Portalo.">
   <link rel="canonical" href="https://mololo.es/">
-  <link rel="icon" type="image/png" href="assets/images/Mololo_Logo_Bg.png">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
 
@@ -17,6 +17,8 @@
   <meta property="og:image" content="https://mololo.es/assets/images/hero/hero.webp">
   <meta property="og:url" content="https://mololo.es/">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://mololo.es/assets/images/hero/hero.webp">
+  <meta name="theme-color" content="#111111">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
@@ -119,7 +121,7 @@
           <a class="btn-tienda" href="https://shop.mololo.es">TIENDA</a>
         </div>
         <div class="hero-right">
-          <img src="assets/images/hero/hero.webp" alt="Obra de Mololo by Pako Portalo">
+          <img src="assets/images/hero/hero.webp" alt="Obra de Mololo by Pako Portalo" fetchpriority="high">
         </div>
       </div>
 
@@ -214,14 +216,14 @@
 
     <!-- MÓDULO 4: CUADRO — Sapien sobre sapien -->
     <section class="cuadro-lupa" id="encargos">
-      <canvas id="cuadro-lens-canvas"></canvas>
+      <canvas id="cuadro-lens-canvas" aria-hidden="true"></canvas>
       <div class="cuadro-lupa-inner">
         <div class="cuadro-lupa-header">
           <h2 class="cuadro-lupa-titulo">Sapien sobre sapien</h2>
           <p class="cuadro-lupa-sub">acrílico sobre DM. 120 x 60cm</p>
         </div>
         <div class="cuadro-marco" id="cuadro-marco" tabindex="0">
-          <img id="cuadro-img" src="assets/images/cuadro-sapien.jpg" alt="Sapien sobre sapien — Mololo" loading="lazy">
+          <img id="cuadro-img" src="assets/images/cuadro-sapien.webp" alt="Sapien sobre sapien — Mololo" loading="lazy" width="2000" height="1029">
         </div>
         <div class="cuadro-lupa-footer">
           MOLOLO — <span>2022</span>
@@ -249,7 +251,7 @@
           <div class="nl-row">
             <input class="newsletter-input" type="email" name="EMAIL" placeholder="email" required>
             <div style="visibility:hidden;position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true"><input type="text" name="b_276dfd967b8cc6a77df406b2b_a4e99d727c" tabindex="-1" value=""></div>
-            <button class="newsletter-submit" id="nl-submit" type="button">SUSCRIBIRSE</button>
+            <button class="newsletter-submit" id="nl-submit" type="button">SUSCRIBIRME</button>
           </div>
           <label class="nl-consent">
             <input type="checkbox" id="nl-consent" name="consent">

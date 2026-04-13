@@ -1019,7 +1019,7 @@ footer {
   font-family: var(--font-body);
   font-size: 0.8rem;
   letter-spacing: 0.06em;
-  color: rgba(0,0,0,0.4);
+  color: rgba(0,0,0,0.6);
   text-decoration: none;
 }
 .footer-social a:hover { color: var(--black); }
