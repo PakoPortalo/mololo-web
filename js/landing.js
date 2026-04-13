@@ -522,9 +522,20 @@ mobileMenu.querySelectorAll('a').forEach(a => {
     const cbName = 'mc_cb_' + Date.now();
     params.set('c', cbName);
 
-    window[cbName] = function (data) {
+    function cleanup() {
       delete window[cbName];
-      document.head.removeChild(script);
+      if (script.parentNode) document.head.removeChild(script);
+      clearTimeout(timer);
+    }
+
+    function resetBtn() {
+      sending = false;
+      btn.disabled = false;
+      btn.textContent = 'SUSCRIBIRME';
+    }
+
+    window[cbName] = function (data) {
+      cleanup();
 
       const fadeEls = [form, document.getElementById('nl-sub'), document.querySelector('.newsletter-titulo')];
       const msg = (data.msg && (data.msg.includes('already') || data.msg.includes('ya')))
@@ -542,6 +553,8 @@ mobileMenu.querySelectorAll('a').forEach(a => {
 
     const script = document.createElement('script');
     script.src = base + '?' + params.toString();
+    script.onerror = function () { cleanup(); resetBtn(); };
+    const timer = setTimeout(function () { cleanup(); resetBtn(); }, 10000);
     document.head.appendChild(script);
   }
 
