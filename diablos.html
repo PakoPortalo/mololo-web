@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cada cual con sus diablos — en construcción</title>
+<meta name="description" content="Cada cual con sus diablos, un proyecto de Mololo by Pako Portalo. Muy pronto.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/icons/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #f4ead2; /* crema */
+    color: #1a1a1a;
+    font-family: "Syne", "Helvetica Neue", Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .volver {
+    position: fixed;
+    top: 1.2rem;
+    left: 1.4rem;
+    z-index: 10;
+    color: #1a1a1a;
+    opacity: 0.55;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .volver:hover { opacity: 1; }
+
+  .escena {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 24px;
+  }
+
+  /* ── bocadillo de cómic ─────────────────────────────────────────────── */
+  .bocadillo {
+    position: relative;
+    background: #ffffff;
+    border: 3px solid #1a1a1a;
+    border-radius: 18px;
+    padding: 16px 26px;
+    max-width: min(82vw, 420px);
+    text-align: center;
+    font-family: "Bebas Neue", "Syne", sans-serif;
+    font-size: clamp(1.25rem, 4vw, 1.7rem);
+    letter-spacing: 0.06em;
+    line-height: 1.25;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: bocadilloIn 0.5s ease 0.45s forwards;
+  }
+  .bocadillo b { color: #cb3747; font-weight: normal; }
+  /* rabito del bocadillo: triángulo negro (borde) + triángulo blanco encima */
+  .bocadillo::before,
+  .bocadillo::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-style: solid;
+    border-color: transparent;
+  }
+  .bocadillo::before {
+    margin-left: -14px;
+    border-width: 16px 14px 0 14px;
+    border-top-color: #1a1a1a;
+  }
+  .bocadillo::after {
+    margin-left: -10px;
+    border-width: 11.5px 10px 0 10px;
+    border-top-color: #ffffff;
+  }
+  @keyframes bocadilloIn {
+    to { opacity: 1; transform: none; }
+  }
+
+  /* ── el diablo (su archivo con 3 fotogramas de boil apilados; lo fija JS) ── */
+  .diablo {
+    width: min(64vw, 440px);
+    aspect-ratio: 1 / 1;
+    margin-top: 6px;
+    background-repeat: no-repeat;
+    background-size: 100% 300%; /* 3 fotogramas apilados en vertical */
+    animation:
+      diabloPop 0.55s cubic-bezier(0.2, 1.4, 0.35, 1) both,
+      diabloBoil 0.45s steps(1) infinite;
+  }
+  @keyframes diabloPop {
+    from { transform: scale(0.55); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  @keyframes diabloBoil {
+    0%   { background-position-y: 0%; }
+    33%  { background-position-y: 50%; }
+    66%  { background-position-y: 100%; }
+    100% { background-position-y: 0%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .diablo { animation: diabloPop 0.01s both; }
+    .bocadillo { animation: bocadilloIn 0.01s 0s forwards; }
+  }
+</style>
+</head>
+<body>
+
+<a class="volver" href="index.html">&larr; mololo</a>
+
+<main class="escena">
+  <div class="bocadillo">¡Hola! Esta página está <b>en construcción</b></div>
+  <div class="diablo" id="diablo" role="img" aria-label="Un diablo de Cada cual con sus diablos"></div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  // diablos (números de archivo dNN.webp) entre los que se elige el de
+  // recepción, uno aleatorio en cada visita
+  var FILAS = [5, 14, 15, 17];
+
+  var fila = FILAS[Math.floor(Math.random() * FILAS.length)];
+  document.getElementById("diablo").style.backgroundImage =
+    "url(assets/diablos-import/diablos/d" + String(fila).padStart(2, "0") + ".webp)";
+})();
+</script>
+
+</body>
+</html>

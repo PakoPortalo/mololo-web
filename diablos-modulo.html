@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diablos módulo — prueba</title>
+<link rel="stylesheet" href="css/diablos-modulo.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #f4ead2;
+    color: #111111;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Franjas de relleno para simular hero antes/después */
+  .franja {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.35;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .volver {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 50;
+    color: #111111;
+    opacity: 0.5;
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+  .volver:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<a class="volver" href="index.html">&larr; index</a>
+
+<div class="franja">[ hero — placeholder para probar el scroll de llegada ]</div>
+
+<section class="diablos-modulo" id="diablosModulo">
+  <div class="diablos-pin">
+    <div class="diablos-cinta">
+      <div class="diablos-track diablos-track--left"   id="colLeft"></div>
+      <div class="diablos-track diablos-track--center" id="colCenter"></div>
+      <div class="diablos-track diablos-track--right"  id="colRight"></div>
+    </div>
+
+    <div class="diablos-logo" id="diablosLogo">
+      <div
+        class="diablos-logo__mark"
+        id="diablosLogoImg"
+        role="img"
+        aria-label="Cada cual con sus diablos"
+      ></div>
+      <a class="diablos-btn" href="diablos.html">SABER MÁS</a>
+    </div>
+  </div>
+</section>
+
+<div class="franja">[ siguiente sección — placeholder ]</div>
+
+<script src="js/diablos-modulo.js"></script>
+
+</body>
+</html>
