@@ -134,11 +134,12 @@ const holoCard = new HolographicCard(document.getElementById('artista-holo-card'
 
 
 // ================================
-// GREETING: frases en el navbar, solo en el hero (desktop)
+// GREETING: frases en el navbar, solo en el hero y solo en desktop grande
+// (en tablet y móvil, ≤1024px, ni se muestra ni arrancan los temporizadores)
 // ================================
 (function() {
   const el = document.getElementById('nav-greeting');
-  if (!el || window.matchMedia('(max-width: 768px)').matches) return;
+  if (!el || window.matchMedia('(max-width: 1024px)').matches) return;
 
   const phrases = ['Hola!', 'Hello!', '你好!', 'नमस्ते!', 'مرحبًا!', 'สวัสดี!'];
   let idx = 0;
@@ -244,9 +245,12 @@ mobileMenu.querySelectorAll('a').forEach(a => {
 
 // ================================
 // OBRA: cursor local distortion (solo desktop)
+// En tablet y móvil (≤1024px) el título usa #obra-turbulence-simple, que no
+// tiene feImage ni mapa de cursor, así que esto no pinta nada: se sale antes
+// de montar el bucle de animación.
 // ================================
 (function() {
-  if (window.matchMedia('(max-width: 768px)').matches) return;
+  if (window.matchMedia('(max-width: 1024px)').matches) return;
   const obraH2 = document.querySelector('.artista-header-titulo h2');
   const cursorMap = document.getElementById('obra-cursor-map');
   const cursorDisp = document.getElementById('obra-cursor-disp');

@@ -1027,23 +1027,17 @@ footer {
 /* ================================
    RESPONSIVE — MÓVIL (≤768px)
 ================================ */
-@media (max-width: 768px) {
+/* ════════════════════════════════════════════════════════════════════
+   TABLET Y MÓVIL (≤1024px): el hero deja de ir a dos columnas y se apila
+   — bloque negro con logo + botón arriba, imagen debajo. Los ajustes
+   propios de móvil (tamaños más apretados) van en el bloque ≤768px.
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
 
-  /* — Navbar — */
-  nav {
-    position: sticky;
-    top: 0;
-    padding: 0 20px;
-  }
-  main { padding-top: 0; }
-  .nav-links { display: none; }
+  /* el saludo multiidioma del navbar solo se queda en desktop grande */
   .nav-greeting { display: none; }
-  .nav-hamburger { display: flex; }
-  .nav-mobile-menu { display: flex; }
 
-  /* — Hero — */
-  .hero { min-height: 0; }
-
+  /* — Hero apilado — */
   .hero-split {
     display: flex;
     flex-direction: column;
@@ -1069,12 +1063,13 @@ footer {
 
   .hero-left {
     flex: none;
-    padding: 48px 24px 52px;
+    padding: 64px 40px 68px;
     gap: 12px;
   }
 
   .logo-sprite {
-    width: 80%;
+    width: 60%;
+    max-width: 520px;
     height: auto;
     aspect-ratio: 1400 / 400;
   }
@@ -1082,6 +1077,67 @@ footer {
   .btn-tienda {
     margin-top: 28px;
     padding: 14px 40px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SOLO TABLET (769–1024px)
+   ════════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* — Hero: ocupa la pantalla entera bajo el navbar y los dos bloques
+       apilados se reparten la altura a partes iguales; si no, el del dibujo
+       queda bastante más alto que el del logo. En móvil no: allí el alto lo
+       marca el contenido (bloque ≤768px). —
+     .hero ya trae min-height: calc(100svh - 60px) de la regla base, y
+     .hero-split hereda flex: 1, así que ocupa todo menos el ticker */
+  .hero-left,
+  .hero-right {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  .hero-right { height: auto; } /* pisa el 56vw del bloque ≤1024px */
+
+  .hero-left { padding: 40px 40px; }
+
+  /* — Módulo OBRA —
+     El filtro #obra-turbulence lleva un <feImage> con data URI, y el WebKit
+     de iOS (Safari y también Chrome en iPad) no lo resuelve: la cadena del
+     filtro sale vacía y el título desaparecía. Se usa la variante simple,
+     sin feImage, igual que en móvil. El tamaño pasa a vw para que "OBRA"
+     entre siempre de ancho. */
+  .artista-header { height: 55svh; }
+  .artista-header-titulo h2 {
+    font-size: 28vw;
+    letter-spacing: 0.08em;
+    filter: url(#obra-turbulence-simple);
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* el alto del hero lo marca el contenido, no la pantalla */
+  .hero { min-height: 0; }
+
+  /* — Navbar — */
+  nav {
+    position: sticky;
+    top: 0;
+    padding: 0 20px;
+  }
+  main { padding-top: 0; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-mobile-menu { display: flex; }
+
+  /* — Hero: la composición apilada viene del bloque ≤1024px; aquí solo
+       los tamaños más apretados de móvil — */
+  .hero-left { padding: 48px 24px 52px; }
+
+  .logo-sprite {
+    width: 80%;
+    max-width: none;
   }
 
   /* — Productos — */

@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Módulo "Cada cual con sus diablos" — 3 columnas de diablos en loop con
-   parallax + logo central con tilt 3D.
+   Módulo "Cada cual con sus diablos" — 5 columnas (desktop) de diablos en
+   loop con parallax + logo central con tilt 3D.
    Los efectos "boil" van pre-horneados: cada diablo tiene su archivo con 3
    fotogramas (assets/diablos-import/diablos/dNN.webp) y el logo su sprite
    (logo-boil-sheet.webp) — cero filtros SVG en vivo.
@@ -9,12 +9,12 @@
    ══════════════════════════════════════════════════════════════════════════ */
 
 .diablos-modulo {
-  /* ancho de cada columna: bájalo para juntar las laterales al centro */
-  --diablos-col-width: 25vw;
+  /* ancho de cada columna: bájalo para juntar las columnas al centro */
+  --diablos-col-width: 15vw;
 
   position: relative;
   height: 400vh; /* altura/recorrido del módulo. Súbelo/bájalo para alargar o acortar el tramo */
-  background: #f4ead2;
+  background: var(--white);
   border-bottom: 3px solid #111111; /* línea que separa este módulo del siguiente */
 }
 
@@ -36,8 +36,9 @@
   mask-image: linear-gradient(to bottom, #000 0, #000 90%, transparent 100%);
 }
 
-/* 3 columnas pegadas entre sí (sin hueco) y centradas en el viewport.
-   margen lateral = (100vw - 3 * ancho) / 2 */
+/* 5 columnas pegadas entre sí (sin hueco) y centradas en el viewport.
+   margen lateral = (100vw - 5 * ancho) / 2 — mismo margen total que antes
+   con 3 columnas, solo que ahora se reparte en 5. */
 .diablos-track {
   position: absolute;
   top: 0;
@@ -48,9 +49,11 @@
   gap: 22px;
   will-change: transform;
 }
-.diablos-track--left   { left: calc((100vw - 3 * var(--diablos-col-width)) / 2); }
-.diablos-track--center { left: calc((100vw - 3 * var(--diablos-col-width)) / 2 + var(--diablos-col-width)); }
-.diablos-track--right  { left: calc((100vw - 3 * var(--diablos-col-width)) / 2 + 2 * var(--diablos-col-width)); }
+.diablos-track--outer-left  { left: calc((100vw - 5 * var(--diablos-col-width)) / 2); }
+.diablos-track--left        { left: calc((100vw - 5 * var(--diablos-col-width)) / 2 + var(--diablos-col-width)); }
+.diablos-track--center      { left: calc((100vw - 5 * var(--diablos-col-width)) / 2 + 2 * var(--diablos-col-width)); }
+.diablos-track--right       { left: calc((100vw - 5 * var(--diablos-col-width)) / 2 + 3 * var(--diablos-col-width)); }
+.diablos-track--outer-right { left: calc((100vw - 5 * var(--diablos-col-width)) / 2 + 4 * var(--diablos-col-width)); }
 
 /* TAMAÑO DEL DIABLO: sube width/max-width para hacerlos más grandes.
    Cada diablo tiene SU PROPIO archivo (assets/diablos-import/diablos/dNN.webp,
@@ -58,9 +61,9 @@
    Ojo: NO volver a un sprite sheet único — con 13824px de alto superaba el
    tamaño máximo de textura de las GPU móviles y rompía el rendimiento. */
 .diablo-icon {
-  width: 31vw;
-  max-width: 384px;
-  min-width: 137px;
+  width: 14vw;
+  max-width: 260px;
+  min-width: 65px;
   aspect-ratio: 1 / 1;
   background-repeat: no-repeat;
   background-size: 100% 300%; /* 3 fotogramas apilados en vertical */
@@ -91,9 +94,36 @@
   align-items: center;
   cursor: pointer;
   pointer-events: none; /* se activa por JS cuando el logo es visible */
-  transition: filter 0.3s ease;
 }
 .diablos-logo.is-visible { pointer-events: auto; }
+
+/* halo blanco DETRÁS del logo: ESTÁTICO (un gradiente radial fijo, no un
+   filter tipo drop-shadow) para que no dependa de la silueta del sprite ni
+   se recalcule en cada fotograma del hervor/tilt — solo cambia de opacidad
+   una vez, al hacerse visible. Barato y funciona igual en móvil.
+   Va aquí y no en .diablos-logo__mark porque el logo es el BACKGROUND de ese
+   div: un ::before suyo con z-index negativo se pintaría por encima de su
+   propio fondo (y el tilt del JS lo encerraría en su contexto de apilado).
+   Colgado del contenedor sí queda por debajo. Copia el tamaño del logo y lo
+   agranda un poco para que el blanco llegue a los márgenes laterales. */
+.diablos-logo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(75vw, 490px);   /* mismo ancho que .diablos-logo__mark */
+  aspect-ratio: 980 / 758;
+  transform: translateX(-50%) scale(1.3);
+  z-index: -1;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0) 72%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.diablos-logo.is-visible::before { opacity: 1; }
 
 /* Sprite de 3 fotogramas (boil + sombra ya incluida en la imagen). El frame
    es 980×758 con el logo de 760px centrado (el resto es aire para la sombra). */
@@ -105,15 +135,9 @@
   background-repeat: no-repeat;
   background-size: 100% 300%; /* 3 fotogramas apilados en vertical */
   animation: logoBoil 0.45s steps(1) infinite;
-  /* el tilt 3D lo escribe JS en línea cada frame; esta transición corta
-     lo amortigua para que siga al ratón con suavidad */
-  transition: transform 0.15s ease-out, filter 0.3s ease;
+  /* el tilt 3D lo escribe JS en línea cada frame */
+  transition: transform 0.15s ease-out;
 }
-/* hover SOLO sobre el logo (no sobre el botón): shiny — el boil sigue vivo */
-.diablos-logo.is-visible .diablos-logo__mark:hover {
-  filter: drop-shadow(0 0 24px rgba(255, 236, 190, 0.7)) brightness(1.06);
-}
-
 @keyframes logoBoil {
   0%   { background-position-y: 0%; }
   33%  { background-position-y: 50%; }
@@ -123,8 +147,10 @@
 
 /* ── Botón "saber más": entrada al proyecto de los diablos ────────────── */
 /* mismo lenguaje que .btn-tienda / .btn-ver-mas de landing.css.
-   Aparece con fade-in ~1s DESPUÉS de que el logo termine de revelarse
-   (la clase .is-on la pone JS). Hover: solo un poco de zoom, sin shine. */
+   Aparece A LA VEZ que el logo: JS pone .is-on en cuanto arranca el revelado
+   y el fade real lo hereda de la opacidad del contenedor (.diablos-logo), así
+   que aquí el cambio es prácticamente instantáneo.
+   Hover: solo un poco de zoom, sin shine. */
 .diablos-btn {
   position: relative;
   z-index: 1; /* por encima del aire transparente del frame del logo */
@@ -137,9 +163,8 @@
   padding: 13px 36px;
   text-decoration: none;
   opacity: 0;
-  transform: translateY(10px);
   pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.25s ease;
+  transition: opacity 0.06s linear, transform 0.25s ease;
 }
 .diablos-btn.is-on {
   opacity: 1;
@@ -152,22 +177,54 @@
   .diablo-icon.boil, .diablos-logo__mark { animation: none; }
 }
 
-/* ── Responsive: en móvil solo queda la columna central (misma dirección) ── */
-@media (max-width: 768px) {
-  .diablos-modulo { --diablos-col-width: 84vw; }
-  .diablos-track--left,
-  .diablos-track--right { display: none; }
-  .diablos-track--center {
-    left: calc((100vw - var(--diablos-col-width)) / 2);
-  }
+/* ── Tablet (769–1024px): 4 columnas en vez de 5 (se oculta la exterior
+   derecha; la central queda justo a la derecha del eje, que con número par
+   de columnas no hay centro exacto). Logo y botón algo más grandes, y el
+   bloque logo+botón sube (TABLET_LOGO_OFFSET_PX en el JS). El movimiento de
+   las columnas se queda como en desktop: sí lo mueve el scroll. */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .diablos-modulo { --diablos-col-width: 22vw; }
+  .diablos-track--outer-right { display: none; }
+  .diablos-track--outer-left { left: calc((100vw - 4 * var(--diablos-col-width)) / 2); }
+  .diablos-track--left       { left: calc((100vw - 4 * var(--diablos-col-width)) / 2 + var(--diablos-col-width)); }
+  .diablos-track--center     { left: calc((100vw - 4 * var(--diablos-col-width)) / 2 + 2 * var(--diablos-col-width)); }
+  .diablos-track--right      { left: calc((100vw - 4 * var(--diablos-col-width)) / 2 + 3 * var(--diablos-col-width)); }
   .diablo-icon {
-    width: 80vw;
+    width: 20vw;
+    max-width: none;
+  }
+  .diablos-logo__mark { width: min(88vw, 640px); }
+  .diablos-logo::before { width: min(88vw, 640px); } /* el halo sigue al logo */
+  .diablos-btn {
+    font-size: 1.05rem;
+    padding: 15px 42px;
+  }
+}
+
+/* ── Responsive: en móvil quedan 3 columnas (izq/centro/dcha), sin las 2
+   exteriores. El scroll no mueve las columnas ahí — solo su deriva
+   automática (ver isTouchLayout() en diablos-modulo.js). El módulo es
+   además mucho más corto: con 400vh había que arrastrar demasiado scroll
+   para revelar el logo y otro tanto para salir. */
+@media (max-width: 768px) {
+  .diablos-modulo {
+    --diablos-col-width: 30vw;
+    height: 180vh;
+  }
+  .diablos-track--outer-left,
+  .diablos-track--outer-right { display: none; }
+  .diablos-track--left   { left: calc((100vw - 3 * var(--diablos-col-width)) / 2); }
+  .diablos-track--center { left: calc((100vw - 3 * var(--diablos-col-width)) / 2 + var(--diablos-col-width)); }
+  .diablos-track--right  { left: calc((100vw - 3 * var(--diablos-col-width)) / 2 + 2 * var(--diablos-col-width)); }
+  .diablo-icon {
+    width: 27vw;
     min-width: 0;
   }
-  .diablos-logo__mark { width: 94vw; }
+  .diablos-logo__mark { width: 104vw; }
+  .diablos-logo::before { width: 104vw; } /* el halo sigue al logo */
   .diablos-btn {
-    font-size: 0.78rem;
-    padding: 10px 26px;
+    font-size: 0.92rem;
+    padding: 13px 32px;
     margin-top: -52px; /* el frame del logo crece en móvil → más aire que compensar */
   }
 }
@@ -183,14 +240,14 @@ nav { transition: background-color 0.45s ease, box-shadow 0.45s ease; }
 nav .nav-links a { transition: opacity 0.15s, color 0.45s ease; }
 nav .nav-greeting { transition: opacity 1.8s ease, color 0.45s ease; }
 
-/* el logo alternativo (letras negras + última "o" roja) vive en un ::after
+/* el logo alternativo (letras blancas + última "o" roja) vive en un ::after
    superpuesto al <img> original para poder hacer crossfade entre ambos */
 nav .nav-left a { position: relative; display: inline-flex; }
 nav .nav-left a::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../assets/diablos-import/mololo-logo-diablos.webp") left center / contain no-repeat;
+  background: url("../assets/diablos-import/mololo-logo-diablos-white.webp") left center / contain no-repeat;
   opacity: 0;
   transition: opacity 0.45s ease;
   pointer-events: none;
@@ -200,29 +257,29 @@ nav.nav-diablos {
   background: #1f1e1e; /* --fondo: negro cálido del proyecto */
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
 }
-nav.nav-diablos .nav-links a { color: #f4ead2; }               /* crema */
+nav.nav-diablos .nav-links a { color: var(--white); }
 nav.nav-diablos .nav-links a:hover { color: #cb3747; opacity: 1; } /* rojo */
-nav.nav-diablos .nav-greeting { color: #f4ead2; }              /* HOLA! en crema */
-/* ojo a crema: el sprite es trazo negro sobre caja blanca con multiply (la
+nav.nav-diablos .nav-greeting { color: var(--white); }
+/* ojo a blanco: el sprite es trazo negro sobre caja blanca con multiply (la
    caja se funde en claro). En oscuro se invierte el sprite (trazo→claro) y se
    pasa a "screen": la caja invertida (negra) desaparece y el trazo queda
-   crema. El fade lo da el propio oscurecimiento del fondo del navbar. */
+   blanco. El fade lo da el propio oscurecimiento del fondo del navbar. */
 nav.nav-diablos .nav-eye-wrapper .eye {
-  filter: invert(1) sepia(0.4) brightness(1);
+  filter: invert(1);
   mix-blend-mode: screen;
 }
 nav.nav-diablos .nav-logo { opacity: 0; }                      /* crossfade al logo diablos */
 nav.nav-diablos .nav-left a::after { opacity: 1; }
-nav.nav-diablos .nav-hamburger span { background: #f4ead2; }
+nav.nav-diablos .nav-hamburger span { background: var(--white); }
 
 /* menú burger desplegado (móvil), solo mientras el navbar está en modo
-   diablos: fondo oscuro, enlaces crema, rojo al pulsar */
+   diablos: fondo oscuro, enlaces blancos, rojo al pulsar */
 .nav-mobile-menu { transition: max-height 0.3s ease, background-color 0.45s ease; }
 .nav-mobile-menu a { transition: color 0.45s ease; }
 nav.nav-diablos + .nav-mobile-menu { background: #1f1e1e; }
 nav.nav-diablos + .nav-mobile-menu a {
-  color: #f4ead2;
-  border-bottom-color: rgba(244, 234, 210, 0.15);
+  color: var(--white);
+  border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 nav.nav-diablos + .nav-mobile-menu a:hover,
 nav.nav-diablos + .nav-mobile-menu a:active { color: #cb3747; }

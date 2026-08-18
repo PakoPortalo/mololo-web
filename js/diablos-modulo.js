@@ -1,13 +1,16 @@
 /* ══════════════════════════════════════════════════════════════════════════
    Módulo "Cada cual con sus diablos"
-   - 3 columnas de diablos en cinta infinita (loop de 6 por columna).
+   - 5 columnas (desktop) de diablos en cinta infinita (loop de 6 por
+     columna). Solo hay 18 diablos horneados, así que con 30 huecos (5×6)
+     se reparten con repetición controlada (ver buildIconPool más abajo).
    - Scroll 1:1 directo (sin latencia) + deriva automática con rampa suave
      cuando no se scrollea (traspaso sin parones).
    - Logo central: revelado por scroll + tilt 3D siguiendo el ratón.
-   - Imán sutil: los diablos de las columnas laterales se dejan arrastrar
+   - Imán sutil: los diablos de las columnas no-centrales se dejan arrastrar
      unos píxeles hacia el cursor y vuelven con muelle.
-   Requiere el markup: #diablosModulo > .diablos-pin > #colLeft/#colCenter/
-   #colRight + #diablosLogo > #diablosLogoImg  (ver css/diablos-modulo.css)
+   Requiere el markup: #diablosModulo > .diablos-pin > #colOuterLeft/
+   #colLeft/#colCenter/#colRight/#colOuterRight + #diablosLogo >
+   #diablosLogoImg  (ver css/diablos-modulo.css)
    ══════════════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -15,8 +18,8 @@
   var section = document.getElementById("diablosModulo");
   if (!section) return; // página sin módulo
 
-  var ICONS_PER_COL = 6;  // 6 por columna → 18 diablos, todos en UN sprite sheet
-  var TOTAL_ROWS = 18;    // filas del sheet (diablos únicos)
+  var ICONS_PER_COL = 6;  // 6 por columna
+  var TOTAL_ROWS = 18;    // diablos horneados únicos (assets/diablos-import/diablos/d01..d18.webp)
 
   var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -53,19 +56,78 @@
   var GAP = 22; // debe coincidir con el gap del CSS .diablos-track
 
   // ── columnas: cinta infinita, movida por el scroll (1:1) + deriva automática.
-  //    factor = parallax (signo = sentido) ──────────────────────────────────
+  //    factor = parallax (signo = sentido, alterna entre columnas contiguas) ──
   var cols = [
-    { el: document.getElementById("colLeft"),   factor: -0.15, pos: 0, H: 1, base: null },
-    { el: document.getElementById("colCenter"), factor:  0.36, pos: 0, H: 1, base: null },
-    { el: document.getElementById("colRight"),  factor: -0.15, pos: 0, H: 1, base: null },
+    { el: document.getElementById("colOuterLeft"),  factor: -0.15, pos: 0, H: 1, base: null },
+    { el: document.getElementById("colLeft"),       factor:  0.20, pos: 0, H: 1, base: null },
+    { el: document.getElementById("colCenter"),     factor: -0.36, pos: 0, H: 1, base: null },
+    { el: document.getElementById("colRight"),      factor:  0.20, pos: 0, H: 1, base: null },
+    { el: document.getElementById("colOuterRight"), factor: -0.15, pos: 0, H: 1, base: null },
   ];
-  var colLeft = cols[0].el, colCenter = cols[1].el;
+  var colCenter = cols[2].el;
 
-  // reparte los 18 diablos: 6 por columna (la creación real ocurre en boot(),
-  // en diferido, para no descargar ni una imagen hasta acercarse al módulo)
-  var allRows = [];
-  for (var r = 0; r < TOTAL_ROWS; r++) allRows.push(r);
-  shuffle(allRows);
+  // reparte ICONS_PER_COL * cols.length diablos entre las columnas. Solo hay
+  // TOTAL_ROWS (18) diablos horneados para 30 huecos, así que 12 se repiten
+  // por fuerza — pero: (a) ningún diablo se repite más de 2 veces, y
+  // (b) las dos copias de un mismo diablo nunca caen en la misma columna ni
+  // en columnas contiguas (mínimo 2 de distancia), así que casi no se notan.
+  var TOTAL_ICONS = ICONS_PER_COL * cols.length;
+  var iconPool = buildIconPool(TOTAL_ICONS, TOTAL_ROWS, ICONS_PER_COL, cols.length);
+
+  // baraja TOTAL_ROWS diablos únicos, añade los repetidos necesarios (máx.
+  // 1 repetición cada uno) y reparte en columnas: nunca deja dos copias del
+  // mismo diablo en la MISMA columna (regla dura), y prueba varias veces a
+  // que tampoco caigan en columnas contiguas (se queda con el mejor intento).
+  function buildIconPool(totalIcons, uniqueCount, perColumn, numCols) {
+    var extraNeeded = totalIcons - uniqueCount; // cuántos huecos sobran sobre los únicos
+
+    function attempt() {
+      var pool = [];
+      for (var r = 0; r < uniqueCount; r++) pool.push(r);
+      shuffle(pool);
+      var extras = shuffle(pool.slice(0, Math.max(0, extraNeeded))); // se repiten, máx. 1 vez cada uno
+      var pending = shuffle(pool.concat(extras));
+
+      var columns = [];
+      for (var c = 0; c < numCols; c++) columns.push([]);
+
+      for (var col = 0; col < numCols; col++) {
+        while (columns[col].length < perColumn && pending.length) {
+          var bestIdx = -1, bestScore = -1;
+          for (var i = 0; i < pending.length; i++) {
+            if (columns[col].indexOf(pending[i]) !== -1) continue; // misma columna: nunca
+            var adjacent = false;
+            for (var c2 = 0; c2 < numCols; c2++) {
+              if (Math.abs(c2 - col) === 1 && columns[c2].indexOf(pending[i]) !== -1) { adjacent = true; break; }
+            }
+            var score = adjacent ? 0 : 1;
+            if (score > bestScore) { bestScore = score; bestIdx = i; if (score === 1) break; }
+          }
+          if (bestIdx === -1) bestIdx = 0; // caso extremo: acepta lo que quede (nunca debería pasar aquí)
+          columns[col].push(pending.splice(bestIdx, 1)[0]);
+        }
+      }
+      return columns;
+    }
+
+    function countAdjacentViolations(columns) {
+      var n = 0;
+      for (var col = 0; col < columns.length - 1; col++) {
+        columns[col].forEach(function (id) {
+          if (columns[col + 1].indexOf(id) !== -1) n++;
+        });
+      }
+      return n;
+    }
+
+    var best = null, bestViolations = Infinity;
+    for (var t = 0; t < 40 && bestViolations > 0; t++) {
+      var candidate = attempt();
+      var violations = countAdjacentViolations(candidate);
+      if (violations < bestViolations) { bestViolations = violations; best = candidate; }
+    }
+    return best;
+  }
 
   var logoEl = document.getElementById("diablosLogo");
   var markEl = document.getElementById("diablosLogoImg");
@@ -79,8 +141,23 @@
 
   var CENTER_START = 0.25; // el logo se revela pronto y se queda centrado mucho más scroll
   var CENTER_END = 0.40;
-  var BTN_START = 0.60;    // el temporizador del botón arranca cuando el logo va por este % de opacidad
-  var BTN_DELAY_MS = 550; // y el botón aparece este tiempo después
+  // en móvil el módulo es más corto (ver el media query del CSS) y además el
+  // logo se revela mucho antes: si no, hay que arrastrar demasiado scroll
+  // para que aparezca y otro tanto para salir del módulo.
+  var MOBILE_CENTER_START = 0.08;
+  var MOBILE_CENTER_END = 0.26;
+  // desplazamiento vertical del bloque logo+botón (negativo = hacia arriba).
+  // En desktop basta con unos px para compensar el aire del frame y que
+  // logo+botón queden centrados como unidad. En tablet se quiere claramente
+  // por encima del centro, así que va en fracción del alto de pantalla: en
+  // px fijos (80px sobre ~1180px de alto) no se notaba.
+  var LOGO_OFFSET_PX = -26;
+  var MOBILE_LOGO_OFFSET_PX = -78;
+  var TABLET_LOGO_OFFSET_VH = -0.14; // -14% del alto del viewport
+  // el botón entra A LA VEZ que el logo: se enciende en cuanto arranca el
+  // revelado y el fade lo hereda de la opacidad del contenedor (logoEl)
+  var BTN_START = 0;
+  var BTN_DELAY_MS = 0;
   var logoHover = false;   // hover sobre el LOGO (no el botón): zoom del logo
   var btnShownAt = null;   // instante en que arrancó el temporizador del botón
 
@@ -114,6 +191,15 @@
   var AUTO_RAMP_IN = 0.045;   // qué tan suave entra el auto al soltar el scroll
   var AUTO_RAMP_OUT = 0.25;   // qué tan rápido se apaga al volver a scrollear
   var INPUT_WINDOW_MS = 140;  // margen para considerar que sigues scrolleando
+
+  // SOLO en móvil el scroll NO mueve las columnas (se sentía rarísimo: bajas
+  // y los diablos suben) — se mueven solo con su deriva automática, a ritmo
+  // constante y lento. En tablet sí se mueven con el scroll, como en desktop.
+  var MOBILE_BREAKPOINT = 768;
+  var TOUCH_BREAKPOINT = 1024;  // móvil + tablet (solo para colocar el logo)
+  var MOBILE_AUTO_SCROLLVEL = 0.09;
+  function isMobile() { return window.innerWidth <= MOBILE_BREAKPOINT; }
+  function isTouchLayout() { return window.innerWidth <= TOUCH_BREAKPOINT; }
   var autoStrength = 0;
   var lastScrollY = null;
   var lastInputTime = -1e9;
@@ -176,6 +262,8 @@
     var now = performance.now();
     var dt = Math.min(64, now - lastTickTime); // clamp para pestañas en 2º plano
     lastTickTime = now;
+    var mobile = isMobile();
+    var touch = isTouchLayout(); // móvil + tablet: sube el bloque logo+botón
 
     // ── delta de scroll (px, con signo) ──
     var scrollY = window.scrollY || window.pageYOffset;
@@ -192,17 +280,31 @@
     }
 
     // ── logo: revelado según el scroll real por la sección ──
-    // (el -26px sube el conjunto para que logo+botón queden centrados como unidad)
+    // (LOGO_OFFSET_PX sube el conjunto para que logo+botón queden centrados
+    //  como unidad; en móvil se revela antes y sube algo más)
     rawP = clamp01((scrollY - sectionTop) / scrollRange);
     smoothedP += (rawP - smoothedP) * EASE;
     if (Math.abs(smoothedP - rawP) < 0.0005) smoothedP = rawP;
-    var logoT = smoothstep(CENTER_START, CENTER_END, smoothedP);
+    var logoT = smoothstep(
+      mobile ? MOBILE_CENTER_START : CENTER_START,
+      mobile ? MOBILE_CENTER_END : CENTER_END,
+      smoothedP
+    );
+    var logoOffset = mobile ? MOBILE_LOGO_OFFSET_PX
+                   : touch  ? Math.round(TABLET_LOGO_OFFSET_VH * window.innerHeight)
+                   : LOGO_OFFSET_PX;
+    // el signo se compone a mano: "calc(-50% + -80px)" es sintaxis inválida y
+    // Safari tira el transform entero (el logo se quedaba centrado del todo)
+    var offsetCss = logoOffset < 0
+      ? "- " + Math.abs(logoOffset) + "px"
+      : "+ " + logoOffset + "px";
     logoEl.style.opacity = logoT;
-    logoEl.style.transform = "translate(-50%, calc(-50% - 26px)) scale(" + (0.82 + logoT * 0.18) + ")";
+    logoEl.style.transform =
+      "translate(-50%, calc(-50% " + offsetCss + ")) scale(" + (0.82 + logoT * 0.18) + ")";
     logoEl.classList.toggle("is-visible", logoT > 0.98);
 
     // ── botón "saber más": el temporizador arranca cuando el logo va por
-    //    BTN_START (75%) de su fade-in; el botón aparece BTN_DELAY_MS después ──
+    //    BTN_START de su fade-in; el botón aparece BTN_DELAY_MS después ──
     if (btnEl) {
       if (logoT > BTN_START) {
         if (btnShownAt === null) btnShownAt = now;
@@ -231,16 +333,21 @@
     var autoTarget = (scrolling || prefersReducedMotion) ? 0 : 1;
     autoStrength += (autoTarget - autoStrength) * (autoTarget === 0 ? AUTO_RAMP_OUT : AUTO_RAMP_IN);
 
-    // ── columnas: scroll directo 1:1 + capa automática + loop ──
+    // ── columnas: scroll directo 1:1 + capa automática + loop (desktop) /
+    //    solo deriva automática constante, sin scroll (móvil y tablet) ──
     var vh = window.innerHeight;
     var viewportCenter = vh / 2;
     var fadeRadius = vh * FADE_RADIUS_FACTOR;
 
     for (var i = 0; i < cols.length; i++) {
       var col = cols[i];
-      if (col.hidden) continue; // laterales ocultas en móvil
-      col.pos += delta * col.factor;                              // 1:1 con el scroll
-      col.pos += AUTO_SCROLLVEL * autoStrength * col.factor * dt; // deriva automática
+      if (col.hidden) continue; // exteriores ocultas en móvil/tablet
+      if (mobile) {
+        col.pos += MOBILE_AUTO_SCROLLVEL * col.factor * dt; // deriva automática, el scroll no influye
+      } else {
+        col.pos += delta * col.factor;                              // 1:1 con el scroll
+        col.pos += AUTO_SCROLLVEL * autoStrength * col.factor * dt; // deriva automática
+      }
 
       var wrapped = ((col.pos % col.H) + col.H) % col.H;
       var ty = -wrapped;
@@ -295,14 +402,14 @@
     if (booted) return;
     booted = true;
 
-    fillColumn(cols[0], allRows.slice(0, ICONS_PER_COL));
-    fillColumn(cols[1], allRows.slice(ICONS_PER_COL, ICONS_PER_COL * 2));
-    fillColumn(cols[2], allRows.slice(ICONS_PER_COL * 2, ICONS_PER_COL * 3));
+    cols.forEach(function (col, i) {
+      fillColumn(col, iconPool[i]);
+    });
     markEl.style.backgroundImage = "url(assets/diablos-import/logo-boil-sheet.webp)";
 
     window.addEventListener("resize", recomputeLayout);
     if (window.ResizeObserver) {
-      new ResizeObserver(recomputeLayout).observe(colLeft);
+      new ResizeObserver(recomputeLayout).observe(cols[0].el);
     }
     recomputeLayout();
     // arranca cada columna en una fase distinta para que no coincidan
