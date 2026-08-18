@@ -19,3 +19,15 @@ _mololo_assets_backup/
 # Documentos internos
 IMPORTANTE.md
 politica-privacidad.md
+
+# Instrucciones para Claude Code (solo local)
+CLAUDE.md
+
+# Páginas de prueba (no se publican)
+diablos.html
+diablos-modulo.html
+
+# Assets que ya no usa la web (se conservan en local por si acaso)
+assets/images/cuadro-sapien.jpg
+assets/images/Mololo_Logo_Bg.png
+assets/diablos-import/mololo-logo-diablos.webp
