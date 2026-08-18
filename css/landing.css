@@ -394,6 +394,15 @@ main { padding-top: 60px; }
   line-height: 1.6;
 }
 
+/* firma bajo el subtítulo del hero */
+.hero-by {
+  margin: -2px 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.4);
+}
+
 .btn-tienda {
   display: inline-block;
   position: relative;
