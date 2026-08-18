@@ -1,0 +1,164 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PRUEBA — pop-up del diablo de recepción
+   Todo va prefijado con .dpop para no chocar con nada de landing.css ni de
+   diablos-modulo.css. El markup lo inyecta js/diablo-popup.js, así que para
+   quitar el experimento basta con borrar del index el <link> y el <script>.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.dpop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999; /* el navbar está en 100 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 18, 18, 0.82);
+  animation: dpopFondoIn 0.35s ease both;
+}
+.dpop[hidden] { display: none; }
+@keyframes dpopFondoIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* la X: grande, blanca, arriba a la derecha */
+.dpop-cerrar {
+  position: absolute;
+  top: clamp(10px, 2.5vw, 26px);
+  right: clamp(12px, 3vw, 34px);
+  width: clamp(44px, 8vw, 64px);
+  height: clamp(44px, 8vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: #ffffff;
+  line-height: 1;
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-family: "Syne", Arial, sans-serif;
+  opacity: 0.9;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+.dpop-cerrar:hover { opacity: 1; transform: scale(1.12) rotate(90deg); }
+
+/* ── bocadillo de cómic ──────────────────────────────────────────────── */
+.dpop-bocadillo {
+  position: relative;
+  background: #ffffff;
+  border: 3px solid #1a1a1a;
+  border-radius: 18px;
+  padding: 16px 26px;
+  max-width: min(82vw, 440px);
+  text-align: center;
+  color: #1a1a1a;
+  font-family: "Bebas Neue", "Syne", sans-serif;
+  font-size: clamp(1.25rem, 4vw, 1.7rem);
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: dpopBocadilloIn 0.45s ease 0.35s forwards;
+}
+.dpop-bocadillo b { color: #cb3747; font-weight: normal; }
+/* rabito: triángulo negro (borde) + triángulo blanco encima */
+.dpop-bocadillo::before,
+.dpop-bocadillo::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border-style: solid;
+  border-color: transparent;
+}
+.dpop-bocadillo::before {
+  margin-left: -14px;
+  border-width: 16px 14px 0 14px;
+  border-top-color: #1a1a1a;
+}
+.dpop-bocadillo::after {
+  margin-left: -10px;
+  border-width: 11.5px 10px 0 10px;
+  border-top-color: #ffffff;
+}
+@keyframes dpopBocadilloIn { to { opacity: 1; transform: none; } }
+
+/* El texto se escribe letra a letra. Se apilan dos copias en la misma celda
+   de grid: una invisible con el texto completo, que reserva el hueco, y
+   encima la que se va escribiendo — así el bocadillo no crece ni empuja al
+   diablo hacia abajo. */
+.dpop-texto { display: grid; }
+.dpop-texto > * { grid-area: 1 / 1; }
+.dpop-medida { visibility: hidden; }
+
+.dpop-cursor {
+  display: inline-block;
+  width: 0.5em;
+  margin-left: 0.04em;
+  border-bottom: 0.09em solid #1a1a1a;
+  animation: dpopParpadeo 0.6s steps(1) infinite;
+}
+.dpop-cursor.off { display: none; }
+@keyframes dpopParpadeo { 50% { opacity: 0; } }
+
+/* ── el diablo ────────────────────────────────────────────────────────
+   Tres capas para que no se pisen las transformaciones:
+     .dpop-pop  → animación de entrada (transform)
+     .dpop-btn  → zoom al pasar el ratón (transform)
+     .dpop-diablo → imagen + hervor (background-position) + troquelado
+   ─────────────────────────────────────────────────────────────────── */
+.dpop-pop {
+  margin-top: 6px;
+  animation: dpopEntrada 0.5s cubic-bezier(0.2, 1.4, 0.35, 1) both;
+}
+@keyframes dpopEntrada {
+  from { transform: scale(0.55); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.dpop-btn {
+  display: block;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.22s ease;
+}
+.dpop-btn:hover { transform: scale(1.07); }
+.dpop-btn:active { transform: scale(1.02); }
+
+/* el archivo del diablo (3 fotogramas de hervor apilados) lo fija el JS */
+.dpop-diablo {
+  display: block;
+  width: min(64vw, 400px);
+  aspect-ratio: 1 / 1;
+  background-repeat: no-repeat;
+  background-size: 100% 300%;
+  animation: dpopHervor 0.45s steps(1) infinite;
+  /* TROQUELADO: línea blanca siguiendo la silueta, como una pegatina
+     die-cut, para que el diablo no se funda con el fondo oscuro. Son
+     drop-shadows blancos sin desenfoque en 8 direcciones; el navegador los
+     calcula sobre el alfa de la imagen, así que rodean el dibujo y no la
+     caja. Se recalculan con cada fotograma del hervor: vale para UN diablo
+     suelto, no para las columnas del módulo. */
+  filter:
+    drop-shadow( 3px  0   0 #fff) drop-shadow(-3px  0   0 #fff)
+    drop-shadow( 0    3px 0 #fff) drop-shadow( 0   -3px 0 #fff)
+    drop-shadow( 2px  2px 0 #fff) drop-shadow(-2px  2px 0 #fff)
+    drop-shadow( 2px -2px 0 #fff) drop-shadow(-2px -2px 0 #fff);
+}
+@keyframes dpopHervor {
+  0%   { background-position-y: 0%; }
+  33%  { background-position-y: 50%; }
+  66%  { background-position-y: 100%; }
+  100% { background-position-y: 0%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dpop, .dpop-pop { animation-duration: 0.01s; }
+  .dpop-diablo { animation: none; }
+  .dpop-bocadillo { animation: dpopBocadilloIn 0.01s 0s forwards; }
+  .dpop-cursor { animation: none; }
+}

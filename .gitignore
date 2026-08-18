@@ -7,6 +7,9 @@ IA/
 # macOS
 .DS_Store
 
+# Config del editor
+.vscode/
+
 # Roadmap personal (solo local)
 ROADMAP.md
 

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba — pop-up del diablo</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="../assets/icons/favicon.png">
+<!-- Redirige a la portada con el pop-up activado. No es una copia de la
+     landing: se ve la web real, siempre al día, con el experimento encendido.
+     El pop-up vive en css/diablo-popup.css + js/diablo-popup.js y está
+     dormido salvo que la URL lleve ?diablo=1. -->
+<meta http-equiv="refresh" content="0; url=../?diablo=1">
+<script>window.location.replace("../?diablo=1");</script>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: rgba(0,0,0,0.6);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.95rem;
+  }
+</style>
+</head>
+<body>
+  <p>Abriendo la prueba del pop-up… <a href="../?diablo=1">continuar</a></p>
+</body>
+</html>

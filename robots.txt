@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /test-popup/
 
 Sitemap: https://mololo.es/sitemap.xml

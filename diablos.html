@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cada cual con sus diablos — en construcción</title>
-<meta name="description" content="Cada cual con sus diablos, un proyecto de Mololo by Pako Portalo. Muy pronto.">
+<title>Prueba — pop-up del diablo</title>
+<meta name="description" content="Prueba del pop-up de Cada cual con sus diablos.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="assets/icons/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,36 +15,84 @@
   html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    background: #f4ead2; /* crema */
+    min-height: 100%;
+    background: #ffffff;
     color: #1a1a1a;
     font-family: "Syne", "Helvetica Neue", Arial, sans-serif;
-    overflow: hidden;
   }
 
-  .volver {
-    position: fixed;
-    top: 1.2rem;
-    left: 1.4rem;
-    z-index: 10;
-    color: #1a1a1a;
-    opacity: 0.55;
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  .volver:hover { opacity: 1; }
-
-  .escena {
-    height: 100%;
+  /* ── página de mentira, solo para ver el pop-up encima de algo ───────── */
+  .pagina {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
-    padding: 24px;
+    gap: 18px;
+    padding: 40px 24px;
+    text-align: center;
   }
+  .pagina h1 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(2.5rem, 12vw, 7rem);
+    letter-spacing: 0.08em;
+    margin: 0;
+  }
+  .pagina p { max-width: 46ch; opacity: 0.6; line-height: 1.6; margin: 0; }
+  .reabrir {
+    margin-top: 8px;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.14em;
+    color: #ffffff;
+    background: #111111;
+    border: 0;
+    padding: 13px 34px;
+    cursor: pointer;
+  }
+  .reabrir:hover { transform: scale(1.05); }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     POP-UP
+     ══════════════════════════════════════════════════════════════════════ */
+  .popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(20, 18, 18, 0.82);
+    animation: fondoIn 0.35s ease both;
+  }
+  .popup[hidden] { display: none; }
+  @keyframes fondoIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* la X: grande, blanca, arriba a la derecha */
+  .cerrar {
+    position: absolute;
+    top: clamp(10px, 2.5vw, 26px);
+    right: clamp(12px, 3vw, 34px);
+    width: clamp(44px, 8vw, 64px);
+    height: clamp(44px, 8vw, 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: #ffffff;
+    line-height: 1;
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    font-family: "Syne", Arial, sans-serif;
+    font-weight: 400;
+    opacity: 0.9;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+  }
+  .cerrar:hover { opacity: 1; transform: scale(1.12) rotate(90deg); }
 
   /* ── bocadillo de cómic ─────────────────────────────────────────────── */
   .bocadillo {
@@ -53,17 +101,36 @@
     border: 3px solid #1a1a1a;
     border-radius: 18px;
     padding: 16px 26px;
-    max-width: min(82vw, 420px);
+    max-width: min(82vw, 440px);
     text-align: center;
     font-family: "Bebas Neue", "Syne", sans-serif;
     font-size: clamp(1.25rem, 4vw, 1.7rem);
     letter-spacing: 0.06em;
     line-height: 1.25;
+    cursor: default;
     opacity: 0;
     transform: translateY(8px);
-    animation: bocadilloIn 0.5s ease 0.45s forwards;
+    animation: bocadilloIn 0.45s ease 0.35s forwards;
   }
   .bocadillo b { color: #cb3747; font-weight: normal; }
+
+  /* El texto se escribe letra a letra. Para que el bocadillo no vaya
+     creciendo (y empujando al diablo hacia abajo), se apilan dos copias en
+     la misma celda de grid: una invisible con el texto completo, que reserva
+     el hueco, y encima la que se va escribiendo. */
+  .bocadillo-texto { display: grid; }
+  .bocadillo-texto > * { grid-area: 1 / 1; }
+  .medida { visibility: hidden; }
+
+  .cursor {
+    display: inline-block;
+    width: 0.5em;
+    margin-left: 0.04em;
+    border-bottom: 0.09em solid #1a1a1a;
+    animation: parpadeo 0.6s steps(1) infinite;
+  }
+  .cursor.off { display: none; }
+  @keyframes parpadeo { 50% { opacity: 0; } }
   /* rabito del bocadillo: triángulo negro (borde) + triángulo blanco encima */
   .bocadillo::before,
   .bocadillo::after {
@@ -84,24 +151,53 @@
     border-width: 11.5px 10px 0 10px;
     border-top-color: #ffffff;
   }
-  @keyframes bocadilloIn {
-    to { opacity: 1; transform: none; }
-  }
+  @keyframes bocadilloIn { to { opacity: 1; transform: none; } }
 
-  /* ── el diablo (su archivo con 3 fotogramas de boil apilados; lo fija JS) ── */
-  .diablo {
-    width: min(64vw, 440px);
-    aspect-ratio: 1 / 1;
+  /* ── el diablo ───────────────────────────────────────────────────────
+     Tres capas para que no se pisen las transformaciones:
+       .diablo-pop  → animación de entrada (transform)
+       .diablo-btn  → zoom al pasar el ratón (transform)
+       .diablo      → imagen + hervor (background-position) + troquelado
+     ─────────────────────────────────────────────────────────────────── */
+  .diablo-pop {
     margin-top: 6px;
-    background-repeat: no-repeat;
-    background-size: 100% 300%; /* 3 fotogramas apilados en vertical */
-    animation:
-      diabloPop 0.55s cubic-bezier(0.2, 1.4, 0.35, 1) both,
-      diabloBoil 0.45s steps(1) infinite;
+    animation: diabloPop 0.5s cubic-bezier(0.2, 1.4, 0.35, 1) both;
   }
   @keyframes diabloPop {
     from { transform: scale(0.55); opacity: 0; }
     to   { transform: scale(1); opacity: 1; }
+  }
+
+  .diablo-btn {
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.22s ease;
+  }
+  .diablo-btn:hover { transform: scale(1.07); }
+  .diablo-btn:active { transform: scale(1.02); }
+
+  /* el archivo del diablo (3 fotogramas de hervor apilados) lo fija el JS */
+  .diablo {
+    display: block;
+    width: min(64vw, 400px);
+    aspect-ratio: 1 / 1;
+    background-repeat: no-repeat;
+    background-size: 100% 300%; /* 3 fotogramas apilados en vertical */
+    animation: diabloBoil 0.45s steps(1) infinite;
+    /* TROQUELADO: línea blanca siguiendo la silueta, como una pegatina
+       die-cut, para que el diablo no se funda con el fondo oscuro. Son
+       drop-shadows blancos sin desenfoque en 8 direcciones; el navegador los
+       calcula sobre el alfa de la imagen, así que rodean el dibujo y no la
+       caja. Ojo: se recalculan con cada fotograma del hervor, por eso esto
+       vale para UN diablo suelto en un pop-up y no para las columnas. */
+    filter:
+      drop-shadow( 3px  0   0 #fff) drop-shadow(-3px  0   0 #fff)
+      drop-shadow( 0    3px 0 #fff) drop-shadow( 0   -3px 0 #fff)
+      drop-shadow( 2px  2px 0 #fff) drop-shadow(-2px  2px 0 #fff)
+      drop-shadow( 2px -2px 0 #fff) drop-shadow(-2px -2px 0 #fff);
   }
   @keyframes diabloBoil {
     0%   { background-position-y: 0%; }
@@ -111,30 +207,160 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .diablo { animation: diabloPop 0.01s both; }
+    .popup, .diablo-pop { animation-duration: 0.01s; }
+    .diablo { animation: none; }
     .bocadillo { animation: bocadilloIn 0.01s 0s forwards; }
   }
 </style>
 </head>
 <body>
 
-<a class="volver" href="index.html">&larr; mololo</a>
-
-<main class="escena">
-  <div class="bocadillo">¡Hola! Esta página está <b>en construcción</b></div>
-  <div class="diablo" id="diablo" role="img" aria-label="Un diablo de Cada cual con sus diablos"></div>
+<main class="pagina">
+  <h1>PÁGINA DE PRUEBA</h1>
+  <p>Esto es solo el fondo, para comprobar que el pop-up se ve por encima y que al cerrarlo se puede seguir leyendo.</p>
+  <button class="reabrir" id="reabrir" hidden>ABRIR POP-UP OTRA VEZ</button>
 </main>
+
+<!-- ── POP-UP ──────────────────────────────────────────────────────────── -->
+<div class="popup" id="popup" role="dialog" aria-modal="true" aria-label="Cada cual con sus diablos">
+  <button class="cerrar" id="cerrar" aria-label="Cerrar">&times;</button>
+
+  <div class="bocadillo">
+    <span class="bocadillo-texto">
+      <span class="medida" id="medida" aria-hidden="true"></span>
+      <span class="escrito" id="escrito"></span>
+    </span>
+  </div>
+
+  <div class="diablo-pop">
+    <button class="diablo-btn" id="diabloBtn" aria-label="Ver Cada cual con sus diablos en la tienda">
+      <span class="diablo" id="diablo"></span>
+    </button>
+  </div>
+</div>
 
 <script>
 (function () {
   "use strict";
+
+  var TIENDA = "https://shop.mololo.es/products/cada-cual-con-sus-diablos";
   // diablos (números de archivo dNN.webp) entre los que se elige el de
-  // recepción, uno aleatorio en cada visita
-  var FILAS = [5, 14, 15, 17];
+  // recepción, uno aleatorio en cada visita.
+  // Corresponden a los SVG de origen 7, 85 y 50:
+  //   007.svg → d02   085.svg → d15   050.svg → d19
+  var FILAS = [2, 15, 19];
+
+  // texto del bocadillo, por trozos: los marcados en rojo van en <b>
+  var SEGMENTOS = [
+    { t: "¿Vienes por los ", rojo: false },
+    { t: "diablillos",       rojo: true  },
+    { t: "?",                rojo: false },
+    { t: "\n",               rojo: false },
+    { t: "¡Pínchame!",       rojo: true  }
+  ];
+  var MS_POR_LETRA = 30;   // velocidad de escritura
+  var RETRASO_INICIO = 750; // arranca cuando el bocadillo ya ha aparecido
+
+  var popup = document.getElementById("popup");
+  var cerrar = document.getElementById("cerrar");
+  var diabloBtn = document.getElementById("diabloBtn");
+  var reabrir = document.getElementById("reabrir");
+  var medida = document.getElementById("medida");
+  var escrito = document.getElementById("escrito");
 
   var fila = FILAS[Math.floor(Math.random() * FILAS.length)];
   document.getElementById("diablo").style.backgroundImage =
     "url(assets/diablos-import/diablos/d" + String(fila).padStart(2, "0") + ".webp)";
+
+  // ── máquina de escribir ───────────────────────────────────────────────
+  function nodoDe(seg) {
+    return seg.rojo ? document.createElement("b") : document.createElement("span");
+  }
+
+  // copia oculta con el texto completo: reserva el hueco del bocadillo
+  SEGMENTOS.forEach(function (seg) {
+    if (seg.t === "\n") { medida.appendChild(document.createElement("br")); return; }
+    var n = nodoDe(seg);
+    n.textContent = seg.t;
+    medida.appendChild(n);
+  });
+
+  var temporizador = null;
+
+  function escribir() {
+    clearTimeout(temporizador);
+    escrito.textContent = "";
+
+    var cursor = document.createElement("span");
+    cursor.className = "cursor";
+
+    // lista plana de letras, cada una con el nodo al que pertenece
+    var pasos = [];
+    SEGMENTOS.forEach(function (seg) {
+      if (seg.t === "\n") { pasos.push({ salto: true }); return; }
+      var destino = nodoDe(seg);
+      seg.t.split("").forEach(function (c, i) {
+        pasos.push({ letra: c, destino: destino, primera: i === 0 });
+      });
+    });
+
+    escrito.appendChild(cursor);
+    var i = 0;
+
+    (function siguiente() {
+      if (i >= pasos.length) { cursor.classList.add("off"); return; }
+      var p = pasos[i++];
+      if (p.salto) {
+        escrito.insertBefore(document.createElement("br"), cursor);
+      } else {
+        if (p.primera) escrito.insertBefore(p.destino, cursor);
+        p.destino.textContent += p.letra;
+      }
+      temporizador = setTimeout(siguiente, MS_POR_LETRA);
+    })();
+  }
+
+  function abrir() {
+    popup.hidden = false;
+    reabrir.hidden = true;
+    document.body.style.overflow = "hidden";
+    cerrar.focus();
+    // relanza las animaciones de entrada (si no, al reabrir ya están gastadas)
+    [popup, popup.querySelector(".bocadillo"), popup.querySelector(".diablo-pop")]
+      .forEach(function (el) {
+        el.style.animation = "none";
+        void el.offsetHeight; // fuerza el reflow
+        el.style.animation = "";
+      });
+    temporizador = setTimeout(escribir, RETRASO_INICIO);
+  }
+
+  function ocultar() {
+    clearTimeout(temporizador); // corta la escritura si se cierra a media frase
+    popup.hidden = true;
+    reabrir.hidden = false;
+    document.body.style.overflow = "";
+  }
+
+  cerrar.addEventListener("click", ocultar);
+  reabrir.addEventListener("click", abrir);
+
+  // clic fuera del diablo (y fuera del bocadillo): también cierra
+  popup.addEventListener("click", function (e) {
+    if (e.target === popup) ocultar();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !popup.hidden) ocultar();
+  });
+
+  diabloBtn.addEventListener("click", function () {
+    window.open(TIENDA, "_blank", "noopener");
+  });
+
+  // el pop-up ya viene abierto en el HTML: arranca la escritura sin más
+  document.body.style.overflow = "hidden";
+  temporizador = setTimeout(escribir, RETRASO_INICIO);
 })();
 </script>
 
