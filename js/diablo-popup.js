@@ -34,8 +34,8 @@
   ];
 
   var MS_POR_LETRA = 30;      // velocidad de escritura
-  var RETRASO_ESCRITURA = 750; // empieza a escribir con el bocadillo ya puesto
-  var RETRASO_APERTURA = 2500; // cuánto tarda en salir desde que carga la página
+  var RETRASO_ESCRITURA = 350; // empieza a escribir con el bocadillo ya puesto
+  var RETRASO_APERTURA = 500;  // cuánto tarda en salir desde que carga la página
 
   // interruptor: sin ?diablo=1 en la URL, esto no hace absolutamente nada
   if (!/[?&]diablo=1\b/.test(window.location.search)) return;
